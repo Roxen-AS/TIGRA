@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TIGRA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo">◆</span> TIGRA <small>TigerGraph Investigative Reasoning Agent · GraphRAG · policy v1.0</small></div>
+  <div class="top-right">
+    <span id="backend" class="badge">…</span>
+    <span id="llm" class="badge">…</span>
+    <button id="runAll" class="btn">Run all 20</button>
+    <button id="theme" class="icon-btn" title="Toggle theme">◐</button>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="queue">
+    <div class="queue-head">
+      <h2>Alert queue</h2>
+      <div class="filters" id="filters">
+        <button data-f="all" class="on">All</button><button data-f="fraud">Fraud</button>
+        <button data-f="uncertain">Uncertain</button><button data-f="legitimate">Legit</button><button data-f="pending">New</button>
+      </div>
+    </div>
+    <ul id="alerts" class="alert-list"></ul>
+    <form id="adhoc" class="adhoc">
+      <label>Investigate any transaction</label>
+      <div class="row">
+        <input id="adhocTxn" inputmode="numeric" placeholder="TransactionID e.g. 3478561" required>
+        <select id="adhocTrig"><option value="analyst_request">analyst</option><option value="risk_score">risk score</option><option value="customer_report">customer</option></select>
+        <button class="btn sm">Go</button>
+      </div>
+    </form>
+  </aside>
+
+  <section class="workspace">
+    <div id="empty" class="empty">
+      <h1>Pick an alert to investigate</h1>
+      <p>TIGRA pulls the card baseline, device and region neighbourhoods, and the case memory from the graph. It fuses the evidence into a calibrated fraud probability, asks for more evidence when the policy requires it, and recommends next best actions with their approval route.</p>
+    </div>
+
+    <div id="case" class="hidden">
+      <div class="case-head">
+        <div>
+          <div class="case-id"><span id="cId"></span> <span id="cTrig" class="chip"></span> <span id="cStatus" class="chip"></span></div>
+          <p id="cText" class="trigger-text"></p>
+        </div>
+        <button id="rerun" class="btn ghost">Re-investigate</button>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi gauge-kpi"><svg id="gauge" viewBox="0 0 120 70"></svg><div><label>Fraud probability</label><b id="kP">–</b></div></div>
+        <div class="kpi"><label>Verdict</label><b id="kV">–</b><span id="kPat" class="sub"></span></div>
+        <div class="kpi"><label>Exposure</label><b id="kE">–</b><span id="kN" class="sub"></span></div>
+        <div class="kpi"><label>Cost</label><b id="kC">–</b><span id="kL" class="sub"></span></div>
+      </div>
+
+      <div class="panels">
+        <div class="panel timeline-panel">
+          <h3>Investigation trace <span id="live" class="live hidden">live</span></h3>
+          <svg id="spark" class="spark" viewBox="0 0 300 60" preserveAspectRatio="none"></svg>
+          <ol id="trace" class="trace"></ol>
+        </div>
+
+        <div class="panel detail">
+          <nav class="tabs" id="tabs">
+            <button data-t="summary" class="on">Summary</button><button data-t="actions">Actions</button>
+            <button data-t="evidence">Evidence</button><button data-t="sar">SAR</button>
+            <button data-t="graph">Graph</button><button data-t="json">JSON</button>
+          </nav>
+          <div id="tab-summary" class="tab"></div>
+          <div id="tab-actions" class="tab hidden"></div>
+          <div id="tab-evidence" class="tab hidden"></div>
+          <div id="tab-sar" class="tab hidden"></div>
+          <div id="tab-graph" class="tab hidden"><svg id="graphSvg" class="graph"></svg><div id="graphLegend" class="legend"></div></div>
+          <div id="tab-json" class="tab hidden"><button id="dl" class="btn sm">Download answer file</button><pre id="json"></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="toast" class="toast hidden"></div>
+<script src="/static/app.js" type="module"></script>
+</body>
+</html>

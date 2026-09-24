@@ -1,0 +1,43 @@
+// Loading job for the CSVs exported by `python -m tigra.tg_load --export` (header row, comma separated, quoted).
+USE GRAPH TigraGraph
+CREATE LOADING JOB load_tigra FOR GRAPH TigraGraph {
+  DEFINE FILENAME f_cards;
+  DEFINE FILENAME f_devices;
+  DEFINE FILENAME f_txns;
+  DEFINE FILENAME f_next;
+  DEFINE FILENAME f_cases;
+  DEFINE FILENAME f_case_txn;
+  DEFINE FILENAME f_case_conn;
+
+  // cards.csv: id,customer_id,network,card_type
+  LOAD f_cards TO VERTEX Customer VALUES ($1),
+               TO VERTEX Card VALUES ($0, $1, $2, $3),
+               TO EDGE OWNS VALUES ($1, $0)
+    USING header="true", separator=",", QUOTE="double";
+
+  // devices.csv: id,profile,device_info,os,browser,screen
+  LOAD f_devices TO VERTEX DeviceProfile VALUES ($0, $1, $2, $3, $4, $5)
+    USING header="true", separator=",", QUOTE="double";
+
+  // txns.csv: id,ts,amt,product,channel,card_id,customer_id,addr1,addr2,dist1,p_email,r_email,risk_score,device_id,
+  //           device_status,proxy,device_type,M1,M2,M3,M4,M5,M6,C1,C13,D1,D15
+  LOAD f_txns TO VERTEX Txn VALUES ($0, $0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16,
+                                    $17, $18, $19, $20, $21, $22, $23, $24, $25, $26),
+              TO EDGE MADE VALUES ($5, $0),
+              TO EDGE FROM_DEVICE VALUES ($0, $13) WHERE $13 != "",
+              TO EDGE PURCHASER_EMAIL VALUES ($0, $10) WHERE $10 != "",
+              TO EDGE RECIPIENT_EMAIL VALUES ($0, $11) WHERE $11 != "",
+              TO EDGE BILLED_IN VALUES ($0, $7) WHERE $7 != ""
+    USING header="true", separator=",", QUOTE="double";
+
+  // next.csv: from_txn,to_txn (consecutive transactions on the same card)
+  LOAD f_next TO EDGE NEXT VALUES ($0, $1) USING header="true", separator=",";
+
+  // closed_cases.csv: id,customer_id,card_id,opened_at,closed_at,outcome,pattern,exposure_usd,n_txns,report_filed,actions_taken,analyst_notes
+  LOAD f_cases TO VERTEX ClosedCase VALUES ($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11),
+               TO EDGE ON_CARD VALUES ($0, $2)
+    USING header="true", separator=",", QUOTE="double";
+
+  LOAD f_case_txn TO EDGE INVOLVES VALUES ($0, $1) USING header="true", separator=",";
+  LOAD f_case_conn TO EDGE CONNECTED_TO VALUES ($0, $1) USING header="true", separator=",";
+}
