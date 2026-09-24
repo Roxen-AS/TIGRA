@@ -1,0 +1,106 @@
+{
+  "case_id": "HHG-016",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.74,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3534820"
+    ],
+    "first_suspicious_txn_id": "3534820",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 59.67,
+    "evidence": [
+      {
+        "claim": "Flagged $59.67 is a typical amount for this card (card history: 48 txns, median $37.76, 95th pct $83.68, max $94.70)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C09988-K1)",
+        "entity_ids": [
+          "3534820"
+        ]
+      },
+      {
+        "claim": "Device D007054 (Windows | ? | edge 16.0 | ?) had never been used on C09988-K1 before; Vesta identity flag id_15 = New (common profile shared by many cards, so weak evidence)",
+        "source": "graph",
+        "ref": "query:device_seen_on_card(card_id=C09988-K1, device_id=D007054)",
+        "entity_ids": [
+          "C09988-K1"
+        ]
+      },
+      {
+        "claim": "Customer C09988 states they did not make the $59.67 purchase (transaction 3534820)",
+        "source": "customer",
+        "ref": "trigger:HHG-016",
+        "entity_ids": [
+          "C09988",
+          "3534820"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: 3 Card-not-present fraud from a new device.",
+        "source": "document",
+        "ref": "fraud_patterns#3",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: 2 Card-not-present fraud.",
+        "source": "document",
+        "ref": "fraud_patterns#2",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-3944",
+      "CC-4179"
+    ],
+    "summary": "Customer report on C09988-K1 for $59.67 (online, product C). Verdict fraud at probability 0.74: card-not-present fraud from a new device. Key evidence: Flagged $59.67 is a typical amount for this card (card history: 48 txns, median $37.76, 95th pct $83.68, max $94.70). Next: BLOCK_CARD, CREATE_CASE.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-016"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $59.67 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $59.67 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: fraud, but exposure $59.67 is not above $1,000 and there is no shared device, region cluster or coordinated pattern. Case only.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Customer denial plus 1 independent graph evidence group(s) support the decision at probability 0.74; further steps would not change the R2 actions.",
+  "tool_calls": 11,
+  "tokens": 0,
+  "latency_s": 0.13
+}

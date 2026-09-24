@@ -1,0 +1,98 @@
+{
+  "case_id": "HHG-009",
+  "case": {
+    "status": "open",
+    "verdict": "uncertain",
+    "fraud_probability": 0.67,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3581141"
+    ],
+    "first_suspicious_txn_id": "3581141",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 30.02,
+    "evidence": [
+      {
+        "claim": "Flagged $30.02 is a typical amount for this card (card history: 45 txns, median $49.96, 95th pct $243.32, max $343.94)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C08299-K1)",
+        "entity_ids": [
+          "3581141"
+        ]
+      },
+      {
+        "claim": "Customer C08299 states they did not make the $30.02 purchase (transaction 3581141)",
+        "source": "customer",
+        "ref": "trigger:HHG-009",
+        "entity_ids": [
+          "C08299",
+          "3581141"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: 2 Card-not-present fraud.",
+        "source": "document",
+        "ref": "fraud_patterns#2",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: CC-1071 (confirmed_fraud, card_not_present_fraud)",
+        "source": "document",
+        "ref": "case:CC-1071",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-3944",
+      "CC-4179"
+    ],
+    "summary": "Customer report on C08299-K1 for $30.02 (online, product S). Verdict uncertain at probability 0.67: card-not-present fraud. Key evidence: Flagged $30.02 is a typical amount for this card (card history: 45 txns, median $49.96, 95th pct $243.32, max $343.94). Next: BLOCK_CARD, CREATE_CASE.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-009"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $30.02 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $30.02 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: no report. Fraud is not confirmed or strongly suspected.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Customer denial plus 0 independent graph evidence group(s) support the decision at probability 0.67; further steps would not change the R2 actions.",
+  "tool_calls": 10,
+  "tokens": 0,
+  "latency_s": 0.16
+}

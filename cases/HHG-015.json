@@ -1,0 +1,142 @@
+{
+  "case_id": "HHG-015",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.97,
+    "pattern": "account_takeover",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3462385",
+      "3462387",
+      "3462404",
+      "3464869"
+    ],
+    "first_suspicious_txn_id": "3462385",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 2140.94,
+    "evidence": [
+      {
+        "claim": "4 purchases above the card's pre-alert 95th percentile ($324.97) within 48 hours across both channels, total $2,140.94: activity inconsistent with the cardholder",
+        "source": "graph",
+        "ref": "query:card_window(card_id=C03042-K1)",
+        "entity_ids": [
+          "3462385",
+          "3462387",
+          "3462404",
+          "3464869"
+        ]
+      },
+      {
+        "claim": "Flagged $599.94 exceeds every earlier amount on the card (card history: 65 txns, median $99.93, 95th pct $324.97, max $500.03)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C03042-K1)",
+        "entity_ids": [
+          "3464869"
+        ]
+      },
+      {
+        "claim": "Device D006882 (Trident/7.0 | Windows 8.1 | ie 11.0 for desktop | 1680x1050) had never been used on C03042-K1 before; Vesta identity flag id_15 = New",
+        "source": "graph",
+        "ref": "query:device_seen_on_card(card_id=C03042-K1, device_id=D006882)",
+        "entity_ids": [
+          "C03042-K1"
+        ]
+      },
+      {
+        "claim": "Assumed: cardholder denies making the transaction and still has the card (simulated from evidence posterior 0.82)",
+        "source": "customer",
+        "ref": "evidence_request:1",
+        "entity_ids": [
+          "C03042"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: FinCEN advisory on account takeover (FIN-2011-A016)",
+        "source": "document",
+        "ref": "regulatory_guidance#4",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: 5 Account takeover.",
+        "source": "document",
+        "ref": "fraud_patterns#5",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-5011",
+      "CC-0673",
+      "CC-0615"
+    ],
+    "summary": "Risk score on C03042-K1 for $599.94 (online, product R). Verdict fraud at probability 0.97: account takeover. Key evidence: 4 purchases above the card's pre-alert 95th percentile ($324.97) within 48 hours across both channels, total $2,140.94: activity inconsistent with the cardholder | Flagged $599.94 exceeds every earlier amount on the card (card history: 65 txns, median $99.93, 95th pct $324.97, max $500.03) | device profile 'Trident/7.0 | Windows 8.1 | ie 11.0 for desktop | 1680x1050' had never been used on C03042-K1 before; Vesta identity flag id_15 = New. Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-015"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 6,
+      "assumed_response": "Assumed: cardholder denies making the transaction and still has the card (simulated from evidence posterior 0.82)"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "DECLINE_TRANSACTION",
+        "route": "L1",
+        "reason": "Fraud likely (0.82); hold the flagged authorization while verification is pending"
+      },
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "Section 6: probability 0.82 is below the 0.85 stopping threshold; confirm with the cardholder before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "3a: a case is opened whenever evidence is requested and probability >= 0.30"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $2,140.94 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "Fraud strongly suspected and 3a/R2: exposure $2,140.94 exceeds $1,000."
+      }
+    ],
+    "what_changed": "The assumed customer denial moved fraud probability from 0.82 to 0.97. Added BLOCK_CARD, FILE_REPORT; dropped DECLINE_TRANSACTION, VERIFY_WITH_CUSTOMER."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Fraud strongly suspected and 3a/R2: exposure $2,140.94 exceeds $1,000.",
+    "narrative": "This report concerns customer C03042, card C03042-K1. Between 2016-11-16 and 2016-11-17, 4 in-person/online transaction(s) totaling $2,140.94 were identified as unauthorized: 3462385 ($440.96, 2016-11-16 14:57), 3462387 ($550.03, 2016-11-16 14:59), 3462404 ($550.01, 2016-11-16 15:09), 3464869 ($599.94, 2016-11-17 14:03). The activity was detected through a risk score (Real-time model scored transaction 3464869 ($599.94, online) at 0.77. Review and decide.). The cardholder, when contacted, denied making the transactions (simulated response). The method of operation was mixed-channel activity using credentials inconsistent with the cardholder. It is suspicious because 4 purchases above the card's pre-alert 95th percentile ($324.97) within 48 hours across both channels, total $2,140.94: activity inconsistent with the cardholder; Flagged $599.94 exceeds every earlier amount on the card (card history: 65 txns, median $99.93, 95th pct $324.97, max $500.03); device profile 'Trident/7.0 | Windows 8.1 | ie 11.0 for desktop | 1680x1050' had never been used on C03042-K1 before; Vesta identity flag id_15 = New. The bank opened internal case CASE-HHG-015, recommended blocking the card, and placed the account under review. Total suspicious amount: $2,140.94.",
+    "subjects": [
+      "C03042",
+      "C03042-K1"
+    ],
+    "total_amount_usd": 2140.94,
+    "activity_dates": [
+      "2016-11-16",
+      "2016-11-17"
+    ]
+  },
+  "stop_reason": "Verification settled the question: denial raised probability to 0.97; actions follow R2. Further steps would not change them.",
+  "tool_calls": 11,
+  "tokens": 0,
+  "latency_s": 0.16
+}

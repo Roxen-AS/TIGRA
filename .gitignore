@@ -1,0 +1,6 @@
+data/
+server.log
+__pycache__/
+*.pyc
+backend/.env
+cases/decision_log/

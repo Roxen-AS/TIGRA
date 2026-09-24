@@ -1,0 +1,109 @@
+{
+  "case_id": "HHG-018",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.57,
+    "pattern": "none",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3491361"
+    ],
+    "first_suspicious_txn_id": "3491361",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 39.08,
+    "evidence": [
+      {
+        "claim": "Region 126 is familiar: 565 earlier purchases on 141 days since 2016-07-02",
+        "source": "graph",
+        "ref": "query:region_history(card_id=C02354-K2, region=126.0)",
+        "entity_ids": [
+          "3491361"
+        ]
+      },
+      {
+        "claim": "Customer C02354 states they did not make the $39.08 purchase (transaction 3491361)",
+        "source": "customer",
+        "ref": "trigger:HHG-018",
+        "entity_ids": [
+          "C02354",
+          "3491361"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: R7 Disputed but legitimate.",
+        "source": "document",
+        "ref": "fraud_policy#10",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: Fraud Policy",
+        "source": "document",
+        "ref": "fraud_policy#0",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-3944",
+      "CC-4179",
+      "CC-4942"
+    ],
+    "summary": "Customer report on C02354-K2 for $39.08 (in person, product W). Verdict uncertain at probability 0.57: no fraud. Key evidence: Region 126 is familiar: 565 earlier purchases on 141 days since 2016-07-02. Next: BLOCK_CARD, CREATE_CASE, ESCALATE_TO_ANALYST.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-018"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $39.08 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: graph evidence conflicts with the customer's denial"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $39.08 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: graph evidence conflicts with the customer's denial"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: no report. Fraud is not confirmed or strongly suspected.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Customer denial plus 0 independent graph evidence group(s) support the decision at probability 0.57; further steps would not change the R2 actions.",
+  "tool_calls": 9,
+  "tokens": 0,
+  "latency_s": 0.16
+}

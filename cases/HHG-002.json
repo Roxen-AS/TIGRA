@@ -1,0 +1,114 @@
+{
+  "case_id": "HHG-002",
+  "case": {
+    "status": "open",
+    "verdict": "uncertain",
+    "fraud_probability": 0.54,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3478782"
+    ],
+    "first_suspicious_txn_id": "3478782",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 292.36,
+    "evidence": [
+      {
+        "claim": "Flagged $292.36 is 2.4x the largest amount this card ever spent (card history: 35 txns, median $47.29, 95th pct $91.41, max $121.32)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C11891-K1)",
+        "entity_ids": [
+          "3478782"
+        ]
+      },
+      {
+        "claim": "Assumed: no reply within 24 hours; evidence posterior 0.54 is too balanced to presume an answer (simulated)",
+        "source": "customer",
+        "ref": "evidence_request:1",
+        "entity_ids": [
+          "C11891"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: 2 Card-not-present fraud.",
+        "source": "document",
+        "ref": "fraud_patterns#2",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: CC-1071 (confirmed_fraud, card_not_present_fraud)",
+        "source": "document",
+        "ref": "case:CC-1071",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-5011",
+      "CC-0673",
+      "CC-4160"
+    ],
+    "summary": "Risk score on C11891-K1 for $292.36 (online, product C). Verdict uncertain at probability 0.54: card-not-present fraud. Key evidence: Flagged $292.36 is 2.4x the largest amount this card ever spent (card history: 35 txns, median $47.29, 95th pct $91.41, max $121.32). Next: DECLINE_TRANSACTION, CREATE_CASE, MONITOR_CARD.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-002"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 5,
+      "assumed_response": "Assumed: no reply within 24 hours; evidence posterior 0.54 is too balanced to presume an answer (simulated)"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: probability 0.54 is below 0.70 and the case rests on a single signal; verify before any block"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "3a: a case is opened whenever evidence is requested and probability >= 0.30"
+      },
+      {
+        "action": "MONITOR_CARD",
+        "route": "auto",
+        "reason": "Raise monitoring for 72 hours while verification is pending"
+      }
+    ],
+    "final": [
+      {
+        "action": "DECLINE_TRANSACTION",
+        "route": "L1",
+        "reason": "R4: no reply within 24 hours; decline pending authorizations"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "3a: case stays open pending evidence"
+      },
+      {
+        "action": "MONITOR_CARD",
+        "route": "auto",
+        "reason": "R4: no reply within 24 hours"
+      }
+    ],
+    "what_changed": "No reply within 24 hours moved fraud probability from 0.54 to 0.54. Added DECLINE_TRANSACTION; dropped VERIFY_WITH_CUSTOMER."
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: no report. Fraud is not confirmed or strongly suspected.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "No reply within 24 hours (R4); the case stays open with monitoring. Further graph queries cannot resolve the remaining uncertainty without the customer.",
+  "tool_calls": 9,
+  "tokens": 0,
+  "latency_s": 0.13
+}

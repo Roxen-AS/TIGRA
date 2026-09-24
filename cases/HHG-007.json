@@ -1,0 +1,96 @@
+{
+  "case_id": "HHG-007",
+  "case": {
+    "status": "closed_legitimate",
+    "verdict": "legitimate",
+    "fraud_probability": 0.11,
+    "pattern": "none",
+    "pattern_description": "",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Region 264 is familiar: 2220 earlier purchases on 155 days since 2016-07-03",
+        "source": "graph",
+        "ref": "query:region_history(card_id=C09933-K2, region=264.0)",
+        "entity_ids": [
+          "3514948"
+        ]
+      },
+      {
+        "claim": "Flagged $111.92 is a typical amount for this card (card history: 2368 txns, median $77.02, 95th pct $335.03, max $2,310.20)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C09933-K2)",
+        "entity_ids": [
+          "3514948"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: The five known fraud patterns",
+        "source": "document",
+        "ref": "fraud_patterns#0",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: Fraud Policy",
+        "source": "document",
+        "ref": "fraud_policy#0",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-5011",
+      "CC-0673",
+      "CC-4787"
+    ],
+    "summary": "Risk score on C09933-K2 for $111.92 (in person, product W). Verdict legitimate at probability 0.11: no fraud. Key evidence: Region 264 is familiar: 2220 earlier purchases on 155 days since 2016-07-03 | Flagged $111.92 is a typical amount for this card (card history: 2368 txns, median $77.02, 95th pct $335.03, max $2,310.20). Next: ALLOW_TRANSACTION, CLOSE_NO_FRAUD.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-007"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "ALLOW_TRANSACTION",
+        "route": "auto",
+        "reason": "Section 6: evidence settles the alert as legitimate"
+      },
+      {
+        "action": "CLOSE_NO_FRAUD",
+        "route": "auto",
+        "reason": "Section 6: probability <= 0.15 on two or more independent pieces of evidence"
+      }
+    ],
+    "final": [
+      {
+        "action": "ALLOW_TRANSACTION",
+        "route": "auto",
+        "reason": "Section 6: evidence settles the alert as legitimate"
+      },
+      {
+        "action": "CLOSE_NO_FRAUD",
+        "route": "auto",
+        "reason": "Section 6: probability <= 0.15 on two or more independent pieces of evidence"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: no report. Fraud is not confirmed or strongly suspected.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Section 6 stopping rule met: probability 0.11 backed by 2 independent evidence groups.",
+  "tool_calls": 9,
+  "tokens": 0,
+  "latency_s": 0.13
+}

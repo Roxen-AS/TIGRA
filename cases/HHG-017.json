@@ -1,0 +1,109 @@
+{
+  "case_id": "HHG-017",
+  "case": {
+    "status": "closed_legitimate",
+    "verdict": "legitimate",
+    "fraud_probability": 0.03,
+    "pattern": "none",
+    "pattern_description": "",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "9 earlier weekly charges of ~$100.09 on product R since 2016-07-18 (31% of that product's history on this card): matches the cardholder's own recurring pattern",
+        "source": "graph",
+        "ref": "query:amount_recurrence(card_id=C04570-K1, amt=100.09)",
+        "entity_ids": [
+          "3117007",
+          "3118964",
+          "3135192",
+          "3403833",
+          "3450436",
+          "3450503"
+        ]
+      },
+      {
+        "claim": "Device D007286 was already used 3 time(s) on this card since 2016-10-27",
+        "source": "graph",
+        "ref": "query:device_seen_on_card(card_id=C04570-K1, device_id=D007286)",
+        "entity_ids": [
+          "C04570-K1"
+        ]
+      },
+      {
+        "claim": "Connection went through a hidden proxy (id_23)",
+        "source": "graph",
+        "ref": "query:get_transaction(txn_id=3450629)",
+        "entity_ids": [
+          "3450629"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: 2 Card-not-present fraud.",
+        "source": "document",
+        "ref": "fraud_patterns#2",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: CC-1071 (confirmed_fraud, card_not_present_fraud)",
+        "source": "document",
+        "ref": "case:CC-1071",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-5011",
+      "CC-0673",
+      "CC-1383"
+    ],
+    "summary": "Risk score on C04570-K1 for $100.09 (online, product R). Verdict legitimate at probability 0.03: no fraud. Key evidence: 9 earlier weekly charges of ~$100.09 on product R since 2016-07-18 (31% of that product's history on this card): matches the cardholder's own recurring pattern | the device was already used 3 time(s) on this card since 2016-10-27 | Connection went through a hidden proxy (id_23). Next: ALLOW_TRANSACTION, CLOSE_NO_FRAUD.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-017"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "ALLOW_TRANSACTION",
+        "route": "auto",
+        "reason": "Section 6: evidence settles the alert as legitimate"
+      },
+      {
+        "action": "CLOSE_NO_FRAUD",
+        "route": "auto",
+        "reason": "Section 6: probability <= 0.15 on two or more independent pieces of evidence"
+      }
+    ],
+    "final": [
+      {
+        "action": "ALLOW_TRANSACTION",
+        "route": "auto",
+        "reason": "Section 6: evidence settles the alert as legitimate"
+      },
+      {
+        "action": "CLOSE_NO_FRAUD",
+        "route": "auto",
+        "reason": "Section 6: probability <= 0.15 on two or more independent pieces of evidence"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: no report. Fraud is not confirmed or strongly suspected.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Section 6 stopping rule met: probability 0.03 backed by 2 independent evidence groups.",
+  "tool_calls": 11,
+  "tokens": 0,
+  "latency_s": 0.16
+}

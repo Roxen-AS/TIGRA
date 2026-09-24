@@ -1,0 +1,117 @@
+{
+  "case_id": "HHG-008",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.47,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3558054"
+    ],
+    "first_suspicious_txn_id": "3558054",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 55.68,
+    "evidence": [
+      {
+        "claim": "Device D000193 was already used 9 time(s) on this card since 2016-12-05",
+        "source": "graph",
+        "ref": "query:device_seen_on_card(card_id=C13171-K2, device_id=D000193)",
+        "entity_ids": [
+          "C13171-K2"
+        ]
+      },
+      {
+        "claim": "Flagged $55.68 is a typical amount for this card (card history: 875 txns, median $39.39, 95th pct $162.20, max $407.32)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C13171-K2)",
+        "entity_ids": [
+          "3558054"
+        ]
+      },
+      {
+        "claim": "Customer C13171 states they did not make the $55.68 purchase (transaction 3558054)",
+        "source": "customer",
+        "ref": "trigger:HHG-008",
+        "entity_ids": [
+          "C13171",
+          "3558054"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: 2 Card-not-present fraud.",
+        "source": "document",
+        "ref": "fraud_patterns#2",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: CC-1071 (confirmed_fraud, card_not_present_fraud)",
+        "source": "document",
+        "ref": "case:CC-1071",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-3944",
+      "CC-4179",
+      "CC-4485"
+    ],
+    "summary": "Customer report on C13171-K2 for $55.68 (online, product C). Verdict uncertain at probability 0.47: card-not-present fraud. Key evidence: the device was already used 9 time(s) on this card since 2016-12-05 | Flagged $55.68 is a typical amount for this card (card history: 875 txns, median $39.39, 95th pct $162.20, max $407.32). Next: BLOCK_CARD, CREATE_CASE, ESCALATE_TO_ANALYST.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-008"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $55.68 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: graph evidence conflicts with the customer's denial"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $55.68 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: graph evidence conflicts with the customer's denial"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: no report. Fraud is not confirmed or strongly suspected.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Customer denial plus 2 independent graph evidence group(s) support the decision at probability 0.47; further steps would not change the R2 actions.",
+  "tool_calls": 11,
+  "tokens": 0,
+  "latency_s": 0.14
+}

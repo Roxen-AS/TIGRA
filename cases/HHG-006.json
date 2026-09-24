@@ -1,0 +1,165 @@
+{
+  "case_id": "HHG-006",
+  "case": {
+    "status": "escalated",
+    "verdict": "fraud",
+    "fraud_probability": 0.99,
+    "pattern": "undocumented",
+    "pattern_description": "Threshold structuring: 4 online purchases on C07297-K1 within 30 minutes, each just under $500, apparently sized to stay below a $500 authorization review threshold. Found by scanning the card's transaction window for clusters of near-threshold amounts; the same shape appears in closed undocumented cases (four purchases just under $500 in forty minutes).",
+    "affected_txn_ids": [
+      "3476602",
+      "3476633",
+      "3476665",
+      "3476682"
+    ],
+    "first_suspicious_txn_id": "3476602",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 1906.07,
+    "evidence": [
+      {
+        "claim": "4 online purchases within 30 minutes, each just under $500 ($478.95, $456.96, $488.04, $482.12), total $1,906.07",
+        "source": "graph",
+        "ref": "query:card_window(card_id=C07297-K1)",
+        "entity_ids": [
+          "3476602",
+          "3476633",
+          "3476665",
+          "3476682"
+        ]
+      },
+      {
+        "claim": "Device D006858 was already used 2 time(s) on this card since 2016-07-12",
+        "source": "graph",
+        "ref": "query:device_seen_on_card(card_id=C07297-K1, device_id=D006858)",
+        "entity_ids": [
+          "C07297-K1"
+        ]
+      },
+      {
+        "claim": "Product code C was never used on this card before (history: W=190, H=2)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C07297-K1)",
+        "entity_ids": [
+          "3476682"
+        ]
+      },
+      {
+        "claim": "4 unusual online purchases within 48 hours (above the card's 95th percentile or from a device new to the card), total $1,906.07",
+        "source": "graph",
+        "ref": "query:card_window(card_id=C07297-K1)",
+        "entity_ids": [
+          "3476602",
+          "3476633",
+          "3476665",
+          "3476682"
+        ]
+      },
+      {
+        "claim": "Flagged $482.12 is above the card's 95th percentile (card history: 192 txns, median $62.67, 95th pct $321.26, max $1,104.00)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C07297-K1)",
+        "entity_ids": [
+          "3476682"
+        ]
+      },
+      {
+        "claim": "Customer C07297 states they did not make the $482.12 purchase (transaction 3476682)",
+        "source": "customer",
+        "ref": "trigger:HHG-006",
+        "entity_ids": [
+          "C07297",
+          "3476682"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: R7 Disputed but legitimate.",
+        "source": "document",
+        "ref": "fraud_policy#10",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: R9 Undocumented patterns.",
+        "source": "document",
+        "ref": "fraud_policy#12",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-3944",
+      "CC-4179"
+    ],
+    "summary": "Customer report on C07297-K1 for $482.12 (online, product C). Verdict fraud at probability 0.99: an undocumented pattern. Key evidence: 4 online purchases within 30 minutes, each just under $500 ($478.95, $456.96, $488.04, $482.12), total $1,906.07 | Product code C was never used on this card before (history: W=190, H=2) | 4 unusual online purchases within 48 hours (above the card's 95th percentile or from a device new to the card), total $1,906.07. Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT, ESCALATE_TO_ANALYST.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-006"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $1,906.07 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "Fraud strongly suspected and 3a/R2: exposure $1,906.07 exceeds $1,000; R9: coordinated/undocumented pattern."
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: activity fits no documented pattern; hand to an analyst with the evidence"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $1,906.07 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "Fraud strongly suspected and 3a/R2: exposure $1,906.07 exceeds $1,000; R9: coordinated/undocumented pattern."
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: activity fits no documented pattern; hand to an analyst with the evidence"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Fraud strongly suspected and 3a/R2: exposure $1,906.07 exceeds $1,000; R9: coordinated/undocumented pattern.",
+    "narrative": "This report concerns customer C07297, card C07297-K1. Between 2016-11-21 and 2016-11-21, 4 online transaction(s) totaling $1,906.07 were identified as unauthorized: 3476602 ($478.95, 2016-11-21 20:00), 3476633 ($456.96, 2016-11-21 20:10), 3476665 ($488.04, 2016-11-21 20:24), 3476682 ($482.12, 2016-11-21 20:30). The activity was detected through a customer report (Customer C07297 message: 'I never made this $482.12 purchase. Please check my card.' Refers to 3476682.). The cardholder reported the activity as unauthorized. The method of operation was a series of online purchases each sized just under $500 within minutes, consistent with structuring below an authorization threshold. It is suspicious because 4 online purchases within 30 minutes, each just under $500 ($478.95, $456.96, $488.04, $482.12), total $1,906.07; Product code C was never used on this card before (history: W=190, H=2); 4 unusual online purchases within 48 hours (above the card's 95th percentile or from a device new to the card), total $1,906.07; Flagged $482.12 is above the card's 95th percentile (card history: 192 txns, median $62.67, 95th pct $321.26, max $1,104.00). The bank opened internal case CASE-HHG-006, recommended blocking the card, and placed the account under review. Total suspicious amount: $1,906.07.",
+    "subjects": [
+      "C07297",
+      "C07297-K1"
+    ],
+    "total_amount_usd": 1906.07,
+    "activity_dates": [
+      "2016-11-21",
+      "2016-11-21"
+    ]
+  },
+  "stop_reason": "Customer denial plus 3 independent graph evidence group(s) support the decision at probability 0.99; further steps would not change the R2 actions.",
+  "tool_calls": 11,
+  "tokens": 0,
+  "latency_s": 0.16
+}

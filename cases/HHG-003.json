@@ -1,0 +1,127 @@
+{
+  "case_id": "HHG-003",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.55,
+    "pattern": "none",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3530056",
+      "3530164"
+    ],
+    "first_suspicious_txn_id": "3530056",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 165.93,
+    "evidence": [
+      {
+        "claim": "Region 330 is familiar: 42 earlier purchases on 33 days since 2016-07-09",
+        "source": "graph",
+        "ref": "query:region_history(card_id=C08623-K2, region=330.0)",
+        "entity_ids": [
+          "3530164"
+        ]
+      },
+      {
+        "claim": "Flagged $49.00 is a typical amount for this card (card history: 949 txns, median $65.04, 95th pct $424.93, max $2,680.95)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C08623-K2)",
+        "entity_ids": [
+          "3530164"
+        ]
+      },
+      {
+        "claim": "Purchaser email domain me.com never appeared on this card before; it was used on 2 purchases within 24 hours",
+        "source": "graph",
+        "ref": "query:email_seen_on_card(card_id=C08623-K2)",
+        "entity_ids": [
+          "3530056",
+          "3530164"
+        ]
+      },
+      {
+        "claim": "Customer C08623 states they did not make the $49.00 purchase (transaction 3530164)",
+        "source": "customer",
+        "ref": "trigger:HHG-003",
+        "entity_ids": [
+          "C08623",
+          "3530164"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: R7 Disputed but legitimate.",
+        "source": "document",
+        "ref": "fraud_policy#10",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: Fraud Policy",
+        "source": "document",
+        "ref": "fraud_policy#0",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-2717",
+      "CC-3240",
+      "CC-2871",
+      "CC-3944",
+      "CC-3327"
+    ],
+    "summary": "Customer report on C08623-K2 for $49.00 (in person, product W). Verdict uncertain at probability 0.55: no fraud. Key evidence: Region 330 is familiar: 42 earlier purchases on 33 days since 2016-07-09 | Flagged $49.00 is a typical amount for this card (card history: 949 txns, median $65.04, 95th pct $424.93, max $2,680.95). Next: BLOCK_CARD, CREATE_CASE, ESCALATE_TO_ANALYST.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-003"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $165.93 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: graph evidence conflicts with the customer's denial"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $165.93 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: graph evidence conflicts with the customer's denial"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: no report. Fraud is not confirmed or strongly suspected.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Customer denial plus 1 independent graph evidence group(s) support the decision at probability 0.55; further steps would not change the R2 actions.",
+  "tool_calls": 10,
+  "tokens": 0,
+  "latency_s": 0.14
+}

@@ -1,0 +1,157 @@
+{
+  "case_id": "HHG-019",
+  "case": {
+    "status": "escalated",
+    "verdict": "fraud",
+    "fraud_probability": 0.88,
+    "pattern": "undocumented",
+    "pattern_description": "Device-sharing ring: one device profile (Windows | other | chrome 61.0 | 1280x720) placed online purchases on 5 unrelated customers' cards within a few weeks, with near-identical amounts and contact details. Found by traversing Device -> Transaction -> Card for the flagged device; per-card history alone looks ordinary.",
+    "affected_txn_ids": [
+      "3503878"
+    ],
+    "first_suspicious_txn_id": "3503878",
+    "connected_card_ids": [
+      "C01104-K2",
+      "C01983-K1",
+      "C06224-K2",
+      "C11309-K1"
+    ],
+    "connected_device_profiles": [
+      "Windows | other | chrome 61.0 | 1280x720"
+    ],
+    "exposure_usd": 99.92,
+    "evidence": [
+      {
+        "claim": "Device profile D008275 (Windows | other | chrome 61.0 | 1280x720) was used by 5 different cards within \u00b114 days; near-identical amounts (mean $100.00, variation 0%) on one product code; the same purchaser/recipient email pair verizon.net / gmail.com on 100% of them",
+        "source": "graph",
+        "ref": "query:device_neighbors(device_id=D008275, days=14)",
+        "entity_ids": [
+          "C01104-K2",
+          "C01983-K1",
+          "C06224-K2",
+          "C11309-K1"
+        ]
+      },
+      {
+        "claim": "Device D008275 (Windows | other | chrome 61.0 | 1280x720) had never been used on C07987-K2 before; Vesta identity flag id_15 = New",
+        "source": "graph",
+        "ref": "query:device_seen_on_card(card_id=C07987-K2, device_id=D008275)",
+        "entity_ids": [
+          "C07987-K2"
+        ]
+      },
+      {
+        "claim": "Flagged $99.92 is a typical amount for this card (card history: 217 txns, median $116.92, 95th pct $559.64, max $1,586.94)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C07987-K2)",
+        "entity_ids": [
+          "3503878"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: R9 Undocumented patterns.",
+        "source": "document",
+        "ref": "fraud_policy#12",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: 1 Card testing.",
+        "source": "document",
+        "ref": "fraud_patterns#1",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-2415",
+      "CC-3240",
+      "CC-2871",
+      "CC-0673",
+      "CC-2087"
+    ],
+    "summary": "Risk score on C07987-K2 for $99.92 (online, product R). Verdict fraud at probability 0.88: an undocumented pattern. Key evidence: device profile 'Windows | other | chrome 61.0 | 1280x720' was used by 5 different cards within \u00b114 days; near-identical amounts (mean $100.00, variation 0%) on one product code; the same purchaser/recipient email pair verizon.net / gmail.com on 100% of them | device profile 'Windows | other | chrome 61.0 | 1280x720' had never been used on C07987-K2 before; Vesta identity flag id_15 = New | Flagged $99.92 is a typical amount for this card (card history: 217 txns, median $116.92, 95th pct $559.64, max $1,586.94). Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-019"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R6/section 6: fraud established by independent graph evidence; exposure $99.92 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6/section 6: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "Fraud strongly suspected and R6: activity connects to a shared device profile Windows | other | chrome 61.0 | 1280x720; R9: coordinated/undocumented pattern."
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: 4 other card(s) share the device profile Windows | other | chrome 61.0 | 1280x720"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: activity fits no documented pattern; hand to an analyst with the evidence"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R6/section 6: fraud established by independent graph evidence; exposure $99.92 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6/section 6: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "Fraud strongly suspected and R6: activity connects to a shared device profile Windows | other | chrome 61.0 | 1280x720; R9: coordinated/undocumented pattern."
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: 4 other card(s) share the device profile Windows | other | chrome 61.0 | 1280x720"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: activity fits no documented pattern; hand to an analyst with the evidence"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Fraud strongly suspected and R6: activity connects to a shared device profile Windows | other | chrome 61.0 | 1280x720; R9: coordinated/undocumented pattern.",
+    "narrative": "This report concerns customer C07987, card C07987-K2, and 4 other card(s) linked by the same device profile (C01104-K2, C01983-K1, C06224-K2, C11309-K1). Between 2016-12-01 and 2016-12-01, 1 online transaction(s) totaling $99.92 were identified as unauthorized: 3503878 ($99.92, 2016-12-01 17:28). The activity was detected through a risk score (Real-time model scored transaction 3503878 ($99.92, online) at 0.90. Review and decide.). The transactions came from device profile 'Windows | other | chrome 61.0 | 1280x720'. The method of operation was online purchases from a single device profile shared across many unrelated cardholders, consistent with a coordinated ring. It is suspicious because device profile 'Windows | other | chrome 61.0 | 1280x720' was used by 5 different cards within \u00b114 days; near-identical amounts (mean $100.00, variation 0%) on one product code; the same purchaser/recipient email pair verizon.net / gmail.com on 100% of them; device profile 'Windows | other | chrome 61.0 | 1280x720' had never been used on C07987-K2 before; Vesta identity flag id_15 = New. The bank opened internal case CASE-HHG-019, recommended blocking the card, and placed the linked cards under monitoring. Total suspicious amount: $99.92.",
+    "subjects": [
+      "C07987",
+      "C07987-K2",
+      "C01104-K2",
+      "C01983-K1",
+      "C06224-K2",
+      "C11309-K1",
+      "Windows | other | chrome 61.0 | 1280x720"
+    ],
+    "total_amount_usd": 99.92,
+    "activity_dates": [
+      "2016-12-01",
+      "2016-12-01"
+    ]
+  },
+  "stop_reason": "Section 6 stopping rule met: probability 0.88 backed by 2 independent evidence groups.",
+  "tool_calls": 10,
+  "tokens": 0,
+  "latency_s": 0.13
+}

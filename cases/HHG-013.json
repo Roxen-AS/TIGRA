@@ -1,0 +1,107 @@
+{
+  "case_id": "HHG-013",
+  "case": {
+    "status": "closed_legitimate",
+    "verdict": "legitimate",
+    "fraud_probability": 0.02,
+    "pattern": "none",
+    "pattern_description": "",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Device D007047 (Windows | ? | chrome 66.0 | ?) had never been used on C07671-K2 before; Vesta identity flag id_15 = New (common profile shared by many cards, so weak evidence)",
+        "source": "graph",
+        "ref": "query:device_seen_on_card(card_id=C07671-K2, device_id=D007047)",
+        "entity_ids": [
+          "C07671-K2"
+        ]
+      },
+      {
+        "claim": "Assumed: cardholder confirms the purchase as their own (simulated from evidence posterior 0.33)",
+        "source": "customer",
+        "ref": "evidence_request:1",
+        "entity_ids": [
+          "C07671"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: 3 Card-not-present fraud from a new device.",
+        "source": "document",
+        "ref": "fraud_patterns#3",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: 2 Card-not-present fraud.",
+        "source": "document",
+        "ref": "fraud_patterns#2",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-5011",
+      "CC-0673",
+      "CC-3216"
+    ],
+    "summary": "Risk score on C07671-K2 for $35.66 (online, product C). Verdict legitimate at probability 0.02: no fraud. Key evidence: no strong signal beyond the trigger. Next: ALLOW_TRANSACTION, CLOSE_NO_FRAUD.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-013"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 6,
+      "assumed_response": "Assumed: cardholder confirms the purchase as their own (simulated from evidence posterior 0.33)"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: probability 0.33 is below 0.70 and the case rests on a single signal; verify before any block"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "3a: a case is opened whenever evidence is requested and probability >= 0.30"
+      },
+      {
+        "action": "MONITOR_CARD",
+        "route": "auto",
+        "reason": "Raise monitoring for 72 hours while verification is pending"
+      }
+    ],
+    "final": [
+      {
+        "action": "ALLOW_TRANSACTION",
+        "route": "auto",
+        "reason": "R3: legitimate; let the transaction stand"
+      },
+      {
+        "action": "CLOSE_NO_FRAUD",
+        "route": "auto",
+        "reason": "R3: customer confirms the transaction; confirmation noted in the case file"
+      }
+    ],
+    "what_changed": "The assumed customer confirmation moved fraud probability from 0.33 to 0.02. Added ALLOW_TRANSACTION, CLOSE_NO_FRAUD; dropped VERIFY_WITH_CUSTOMER, CREATE_CASE, MONITOR_CARD."
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: no report. Fraud is not confirmed or strongly suspected.",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "Verification settled the question: the cardholder confirmed the activity (R3). Further graph steps would not change the decision.",
+  "tool_calls": 11,
+  "tokens": 0,
+  "latency_s": 0.16
+}

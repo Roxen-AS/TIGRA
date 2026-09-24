@@ -1,0 +1,163 @@
+{
+  "case_id": "HHG-011",
+  "case": {
+    "status": "escalated",
+    "verdict": "fraud",
+    "fraud_probability": 0.99,
+    "pattern": "undocumented",
+    "pattern_description": "Device-sharing ring: one device profile (SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?) placed online purchases on 4 unrelated customers' cards within a few weeks, with near-identical amounts and contact details. Found by traversing Device -> Transaction -> Card for the flagged device; per-card history alone looks ordinary.",
+    "affected_txn_ids": [
+      "3583368"
+    ],
+    "first_suspicious_txn_id": "3583368",
+    "connected_card_ids": [
+      "C03938-K1",
+      "C05595-K1",
+      "C05678-K1"
+    ],
+    "connected_device_profiles": [
+      "SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?"
+    ],
+    "exposure_usd": 131.3,
+    "evidence": [
+      {
+        "claim": "Device profile D005287 (SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?) was used by 4 different cards within \u00b114 days; near-identical amounts (mean $128.47, variation 2%) on one product code; the same purchaser/recipient email pair gmail.com / gmail.com on 100% of them",
+        "source": "graph",
+        "ref": "query:device_neighbors(device_id=D005287, days=14)",
+        "entity_ids": [
+          "C03938-K1",
+          "C05595-K1",
+          "C05678-K1"
+        ]
+      },
+      {
+        "claim": "Device D005287 (SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?) had never been used on C11923-K2 before; Vesta identity flag id_15 = New",
+        "source": "graph",
+        "ref": "query:device_seen_on_card(card_id=C11923-K2, device_id=D005287)",
+        "entity_ids": [
+          "C11923-K2"
+        ]
+      },
+      {
+        "claim": "Flagged $131.30 is above the card's 95th percentile (card history: 10174 txns, median $28.53, 95th pct $108.20, max $486.52)",
+        "source": "graph",
+        "ref": "query:card_profile(card_id=C11923-K2)",
+        "entity_ids": [
+          "3583368"
+        ]
+      },
+      {
+        "claim": "Customer C11923 states they did not make the $131.30 purchase (transaction 3583368)",
+        "source": "customer",
+        "ref": "trigger:HHG-011",
+        "entity_ids": [
+          "C11923",
+          "3583368"
+        ]
+      },
+      {
+        "claim": "Policy/typology grounding: R7 Disputed but legitimate.",
+        "source": "document",
+        "ref": "fraud_policy#10",
+        "entity_ids": []
+      },
+      {
+        "claim": "Policy/typology grounding: R9 Undocumented patterns.",
+        "source": "document",
+        "ref": "fraud_policy#12",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2496",
+      "CC-3240",
+      "CC-2871",
+      "CC-3944",
+      "CC-4179",
+      "CC-3905"
+    ],
+    "summary": "Customer report on C11923-K2 for $131.30 (online, product C). Verdict fraud at probability 0.99: an undocumented pattern. Key evidence: device profile 'SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?' was used by 4 different cards within \u00b114 days; near-identical amounts (mean $128.47, variation 2%) on one product code; the same purchaser/recipient email pair gmail.com / gmail.com on 100% of them | device profile 'SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?' had never been used on C11923-K2 before; Vesta identity flag id_15 = New | Flagged $131.30 is above the card's 95th percentile (card history: 10174 txns, median $28.53, 95th pct $108.20, max $486.52). Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST.",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-011"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $131.30 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "Fraud strongly suspected and R6: activity connects to a shared device profile SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?; R9: coordinated/undocumented pattern."
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: 3 other card(s) share the device profile SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: activity fits no documented pattern; hand to an analyst with the evidence"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denies the transaction; exposure $131.30 is under $2,500 so route L1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: open/keep the fraud case with evidence attached (3a)"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "Fraud strongly suspected and R6: activity connects to a shared device profile SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?; R9: coordinated/undocumented pattern."
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: 3 other card(s) share the device profile SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: activity fits no documented pattern; hand to an analyst with the evidence"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Fraud strongly suspected and R6: activity connects to a shared device profile SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?; R9: coordinated/undocumented pattern.",
+    "narrative": "This report concerns customer C11923, card C11923-K2, and 3 other card(s) linked by the same device profile (C03938-K1, C05595-K1, C05678-K1). Between 2016-12-29 and 2016-12-29, 1 online transaction(s) totaling $131.30 were identified as unauthorized: 3583368 ($131.30, 2016-12-29 03:27). The activity was detected through a customer report (Customer C11923 message: 'I never made this $131.30 purchase. Please check my card.' Refers to 3583368.). The cardholder reported the activity as unauthorized. The transactions came from device profile 'SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?'. The method of operation was online purchases from a single device profile shared across many unrelated cardholders, consistent with a coordinated ring. It is suspicious because device profile 'SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?' was used by 4 different cards within \u00b114 days; near-identical amounts (mean $128.47, variation 2%) on one product code; the same purchaser/recipient email pair gmail.com / gmail.com on 100% of them; device profile 'SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?' had never been used on C11923-K2 before; Vesta identity flag id_15 = New; Flagged $131.30 is above the card's 95th percentile (card history: 10174 txns, median $28.53, 95th pct $108.20, max $486.52). The bank opened internal case CASE-HHG-011, recommended blocking the card, and placed the linked cards under monitoring. Total suspicious amount: $131.30.",
+    "subjects": [
+      "C11923",
+      "C11923-K2",
+      "C03938-K1",
+      "C05595-K1",
+      "C05678-K1",
+      "SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?"
+    ],
+    "total_amount_usd": 131.3,
+    "activity_dates": [
+      "2016-12-29",
+      "2016-12-29"
+    ]
+  },
+  "stop_reason": "Customer denial plus 3 independent graph evidence group(s) support the decision at probability 0.99; further steps would not change the R2 actions.",
+  "tool_calls": 11,
+  "tokens": 0,
+  "latency_s": 0.14
+}
