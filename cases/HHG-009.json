@@ -38,18 +38,18 @@
         "entity_ids": []
       },
       {
-        "claim": "Policy/typology grounding: CC-1071 (confirmed_fraud, card_not_present_fraud)",
+        "claim": "Policy/typology grounding: 3 Card-not-present fraud from a new device.",
         "source": "document",
-        "ref": "case:CC-1071",
+        "ref": "fraud_patterns#3",
         "entity_ids": []
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-3944",
-      "CC-4179"
+      "CC-2449",
+      "CC-2611",
+      "CC-0080",
+      "CC-2918",
+      "CC-2726"
     ],
     "summary": "Customer report on C08299-K1 for $30.02 (online, product S). Verdict uncertain at probability 0.67: card-not-present fraud. Key evidence: Flagged $30.02 is a typical amount for this card (card history: 45 txns, median $49.96, 95th pct $243.32, max $343.94). Next: BLOCK_CARD, CREATE_CASE.",
     "written_to_graph": true,
@@ -94,5 +94,5 @@
   "stop_reason": "Customer denial plus 0 independent graph evidence group(s) support the decision at probability 0.67; further steps would not change the R2 actions.",
   "tool_calls": 10,
   "tokens": 0,
-  "latency_s": 0.16
+  "latency_s": 3.21
 }

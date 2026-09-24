@@ -3,7 +3,7 @@
   "case": {
     "status": "escalated",
     "verdict": "fraud",
-    "fraud_probability": 0.95,
+    "fraud_probability": 0.97,
     "pattern": "undocumented",
     "pattern_description": "Device-sharing ring: one device profile (SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080) placed online purchases on 28 unrelated customers' cards within a few weeks, always flagged New and behind an anonymous proxy. Found by traversing Device -> Transaction -> Card for the flagged device; per-card history alone looks ordinary.",
     "affected_txn_ids": [
@@ -83,6 +83,17 @@
         ]
       },
       {
+        "claim": "Past confirmed-fraud case(s) CC-2649, CC-2985, CC-2971, CC-3035 share a device with this activity",
+        "source": "graph",
+        "ref": "query:similar_cases",
+        "entity_ids": [
+          "CC-2649",
+          "CC-2985",
+          "CC-2971",
+          "CC-3035"
+        ]
+      },
+      {
         "claim": "Connection went through a anonymous proxy (id_23)",
         "source": "graph",
         "ref": "query:get_transaction(txn_id=3478561)",
@@ -91,7 +102,7 @@
         ]
       },
       {
-        "claim": "Flagged $74.96 is a typical amount for this card (card history: 70 txns, median $55.95, 95th pct $108.27, max $225.94)",
+        "claim": "Flagged $74.96 is a typical amount for this card (card history: 70 txns, median $55.95, 95th pct $108.26, max $225.94)",
         "source": "graph",
         "ref": "query:card_profile(card_id=C13487-K1)",
         "entity_ids": [
@@ -112,17 +123,13 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-4958",
-      "CC-5011",
       "CC-2649",
-      "CC-2971",
       "CC-2985",
-      "CC-3035"
+      "CC-2971",
+      "CC-3035",
+      "CC-0541"
     ],
-    "summary": "Analyst request on C13487-K1 for $74.96 (online, product C). Verdict fraud at probability 0.95: an undocumented pattern. Key evidence: device profile 'SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080' was used by 28 different cards within \u00b114 days; 100% of its transactions are flagged New device behind an anonymous/hidden proxy. The same profile appears on 4 closed confirmed-fraud case(s): CC-2649, CC-2971, CC-2985, CC-3035 | Connection went through a anonymous proxy (id_23) | Flagged $74.96 is a typical amount for this card (card history: 70 txns, median $55.95, 95th pct $108.27, max $225.94). Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST.",
+    "summary": "Analyst request on C13487-K1 for $74.96 (online, product C). Verdict fraud at probability 0.97: an undocumented pattern. Key evidence: device profile 'SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080' was used by 28 different cards within \u00b114 days; 100% of its transactions are flagged New device behind an anonymous/hidden proxy. The same profile appears on 4 closed confirmed-fraud case(s): CC-2649, CC-2971, CC-2985, CC-3035 | Past confirmed-fraud case(s) CC-2649, CC-2985, CC-2971, CC-3035 share a device with this activity | Connection went through a anonymous proxy (id_23). Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST.",
     "written_to_graph": true,
     "graph_case_id": "CASE-HHG-014"
   },
@@ -187,7 +194,7 @@
   "sar": {
     "file": true,
     "reason": "Fraud strongly suspected and R6: activity connects to a shared device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080; R9: coordinated/undocumented pattern.",
-    "narrative": "This report concerns customer C13487, card C13487-K1, and 27 other card(s) linked by the same device profile (C01289-K1, C01996-K2, C02910-K1, C02975-K1, C03676-K2, C04108-K2, C04274-K1, C05448-K2...). Between 2016-11-15 and 2016-11-26, 3 online transaction(s) totaling $439.61 were identified as unauthorized: 3460634 ($112.37, 2016-11-15 20:30), 3478561 ($74.96, 2016-11-22 16:11), 3489320 ($252.28, 2016-11-26 17:39). The activity was detected through a analyst request (Analyst request: several cards this month show purchases from the same unusual device profile. Review transaction 3478561 on card C13487-K1 and look for related). The transactions came from device profile 'SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080'. The method of operation was online purchases from a single device profile shared across many unrelated cardholders, consistent with a coordinated ring. It is suspicious because device profile 'SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080' was used by 28 different cards within \u00b114 days; 100% of its transactions are flagged New device behind an anonymous/hidden proxy. The same profile appears on 4 closed confirmed-fraud case(s): CC-2649, CC-2971, CC-2985, CC-3035; Connection went through a anonymous proxy (id_23). The bank opened internal case CASE-HHG-014, recommended blocking the card, and placed the linked cards under monitoring. Total suspicious amount: $439.61.",
+    "narrative": "This report concerns customer C13487, card C13487-K1, and 27 other card(s) linked by the same device profile (C01289-K1, C01996-K2, C02910-K1, C02975-K1, C03676-K2, C04108-K2, C04274-K1, C05448-K2...). Between 2016-11-15 and 2016-11-26, 3 online transaction(s) totaling $439.61 were identified as unauthorized: 3460634 ($112.37, 2016-11-15 20:30), 3478561 ($74.96, 2016-11-22 16:11), 3489320 ($252.28, 2016-11-26 17:39). The activity was detected through a analyst request (Analyst request: several cards this month show purchases from the same unusual device profile. Review transaction 3478561 on card C13487-K1 and look for related). The transactions came from device profile 'SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080'. The method of operation was online purchases from a single device profile shared across many unrelated cardholders, consistent with a coordinated ring. It is suspicious because device profile 'SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080' was used by 28 different cards within \u00b114 days; 100% of its transactions are flagged New device behind an anonymous/hidden proxy. The same profile appears on 4 closed confirmed-fraud case(s): CC-2649, CC-2971, CC-2985, CC-3035; Past confirmed-fraud case(s) CC-2649, CC-2985, CC-2971, CC-3035 share a device with this activity; Connection went through a anonymous proxy (id_23). The bank opened internal case CASE-HHG-014, recommended blocking the card, and placed the linked cards under monitoring. Total suspicious amount: $439.61.",
     "subjects": [
       "C13487",
       "C13487-K1",
@@ -226,8 +233,8 @@
       "2016-11-26"
     ]
   },
-  "stop_reason": "Section 6 stopping rule met: probability 0.95 backed by 2 independent evidence groups.",
+  "stop_reason": "Section 6 stopping rule met: probability 0.97 backed by 3 independent evidence groups.",
   "tool_calls": 10,
   "tokens": 0,
-  "latency_s": 0.14
+  "latency_s": 11.03
 }

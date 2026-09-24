@@ -46,18 +46,18 @@
         "entity_ids": []
       },
       {
-        "claim": "Policy/typology grounding: CC-1071 (confirmed_fraud, card_not_present_fraud)",
+        "claim": "Policy/typology grounding: 3 Card-not-present fraud from a new device.",
         "source": "document",
-        "ref": "case:CC-1071",
+        "ref": "fraud_patterns#3",
         "entity_ids": []
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-3944",
-      "CC-4179",
+      "CC-3566",
+      "CC-1925",
+      "CC-3728",
+      "CC-2059",
+      "CC-2454",
       "CC-4485"
     ],
     "summary": "Customer report on C13171-K2 for $55.68 (online, product C). Verdict uncertain at probability 0.47: card-not-present fraud. Key evidence: the device was already used 9 time(s) on this card since 2016-12-05 | Flagged $55.68 is a typical amount for this card (card history: 875 txns, median $39.39, 95th pct $162.20, max $407.32). Next: BLOCK_CARD, CREATE_CASE, ESCALATE_TO_ANALYST.",
@@ -113,5 +113,5 @@
   "stop_reason": "Customer denial plus 2 independent graph evidence group(s) support the decision at probability 0.47; further steps would not change the R2 actions.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.14
+  "latency_s": 3.58
 }

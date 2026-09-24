@@ -53,12 +53,10 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-3944",
-      "CC-4179",
-      "CC-1736"
+      "CC-2121",
+      "CC-3778",
+      "CC-1736",
+      "CC-3683"
     ],
     "summary": "Customer report on C08106-K1 for $128.33 (online, product C). Verdict fraud at probability 0.90: card-not-present fraud from a new device. Key evidence: device profile '? | ? | firefox 47.0 | ?' had never been used on C08106-K1 before; Vesta identity flag id_15 = New | Flagged $128.33 is above the card's 95th percentile (card history: 208 txns, median $27.63, 95th pct $96.39, max $138.89). Next: BLOCK_CARD, CREATE_CASE.",
     "written_to_graph": true,
@@ -103,5 +101,5 @@
   "stop_reason": "Customer denial plus 2 independent graph evidence group(s) support the decision at probability 0.90; further steps would not change the R2 actions.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.16
+  "latency_s": 3.71
 }

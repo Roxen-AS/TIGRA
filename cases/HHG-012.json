@@ -42,12 +42,12 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-5011",
-      "CC-0673",
-      "CC-0003"
+      "CC-0003",
+      "CC-3721",
+      "CC-5319",
+      "CC-1574",
+      "CC-2892",
+      "CC-2370"
     ],
     "summary": "Risk score on C05876-K2 for $30.91 (in person, product W). Verdict legitimate at probability 0.07: no fraud. Key evidence: Region 494 is familiar: 21 earlier purchases on 17 days since 2016-07-05 | Flagged $30.91 is a typical amount for this card (card history: 877 txns, median $49.07, 95th pct $226.05, max $2,681.01). Next: ALLOW_TRANSACTION, CLOSE_NO_FRAUD.",
     "written_to_graph": true,
@@ -92,5 +92,5 @@
   "stop_reason": "Section 6 stopping rule met: probability 0.07 backed by 2 independent evidence groups.",
   "tool_calls": 9,
   "tokens": 0,
-  "latency_s": 0.1
+  "latency_s": 2.56
 }

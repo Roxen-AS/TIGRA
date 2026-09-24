@@ -45,11 +45,11 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-3944",
-      "CC-4179",
+      "CC-3634",
+      "CC-2589",
+      "CC-0631",
+      "CC-2432",
+      "CC-2187",
       "CC-4942"
     ],
     "summary": "Customer report on C02354-K2 for $39.08 (in person, product W). Verdict uncertain at probability 0.57: no fraud. Key evidence: Region 126 is familiar: 565 earlier purchases on 141 days since 2016-07-02. Next: BLOCK_CARD, CREATE_CASE, ESCALATE_TO_ANALYST.",
@@ -105,5 +105,5 @@
   "stop_reason": "Customer denial plus 0 independent graph evidence group(s) support the decision at probability 0.57; further steps would not change the R2 actions.",
   "tool_calls": 9,
   "tokens": 0,
-  "latency_s": 0.16
+  "latency_s": 5.99
 }

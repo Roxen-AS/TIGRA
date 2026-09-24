@@ -66,12 +66,11 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-5011",
-      "CC-0673",
-      "CC-0615"
+      "CC-3886",
+      "CC-0615",
+      "CC-1313",
+      "CC-4567",
+      "CC-0279"
     ],
     "summary": "Risk score on C03042-K1 for $599.94 (online, product R). Verdict fraud at probability 0.97: account takeover. Key evidence: 4 purchases above the card's pre-alert 95th percentile ($324.97) within 48 hours across both channels, total $2,140.94: activity inconsistent with the cardholder | Flagged $599.94 exceeds every earlier amount on the card (card history: 65 txns, median $99.93, 95th pct $324.97, max $500.03) | device profile 'Trident/7.0 | Windows 8.1 | ie 11.0 for desktop | 1680x1050' had never been used on C03042-K1 before; Vesta identity flag id_15 = New. Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT.",
     "written_to_graph": true,
@@ -138,5 +137,5 @@
   "stop_reason": "Verification settled the question: denial raised probability to 0.97; actions follow R2. Further steps would not change them.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.16
+  "latency_s": 4.47
 }

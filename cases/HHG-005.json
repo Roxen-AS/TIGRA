@@ -3,7 +3,7 @@
   "case": {
     "status": "open",
     "verdict": "uncertain",
-    "fraud_probability": 0.42,
+    "fraud_probability": 0.57,
     "pattern": "card_not_present_new_device",
     "pattern_description": "",
     "affected_txn_ids": [
@@ -23,6 +23,14 @@
         ]
       },
       {
+        "claim": "Past confirmed-fraud case(s) CC-1672 share a device with this activity",
+        "source": "graph",
+        "ref": "query:similar_cases",
+        "entity_ids": [
+          "CC-1672"
+        ]
+      },
+      {
         "claim": "Purchaser email domain icloud.com never appeared on this card before",
         "source": "graph",
         "ref": "query:email_seen_on_card(card_id=C02923-K1)",
@@ -31,7 +39,7 @@
         ]
       },
       {
-        "claim": "Assumed: no reply within 24 hours; evidence posterior 0.42 is too balanced to presume an answer (simulated)",
+        "claim": "Assumed: no reply within 24 hours; evidence posterior 0.57 is too balanced to presume an answer (simulated)",
         "source": "customer",
         "ref": "evidence_request:1",
         "entity_ids": [
@@ -52,14 +60,14 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-2415",
-      "CC-3240",
-      "CC-2871",
-      "CC-0673",
+      "CC-0965",
+      "CC-1672",
+      "CC-0189",
+      "CC-0374",
+      "CC-0219",
       "CC-2400"
     ],
-    "summary": "Risk score on C02923-K1 for $100.07 (online, product R). Verdict uncertain at probability 0.42: card-not-present fraud from a new device. Key evidence: device profile 'iOS Device | iOS 9.3.5 | mobile safari 9.0 | 1024x768' had never been used on C02923-K1 before; Vesta identity flag id_15 = New. Next: DECLINE_TRANSACTION, CREATE_CASE, MONITOR_CARD.",
+    "summary": "Risk score on C02923-K1 for $100.07 (online, product R). Verdict uncertain at probability 0.57: card-not-present fraud from a new device. Key evidence: device profile 'iOS Device | iOS 9.3.5 | mobile safari 9.0 | 1024x768' had never been used on C02923-K1 before; Vesta identity flag id_15 = New | Past confirmed-fraud case(s) CC-1672 share a device with this activity. Next: DECLINE_TRANSACTION, CREATE_CASE, MONITOR_CARD.",
     "written_to_graph": true,
     "graph_case_id": "CASE-HHG-005"
   },
@@ -67,7 +75,7 @@
     {
       "type": "customer_validation",
       "asked_after_step": 6,
-      "assumed_response": "Assumed: no reply within 24 hours; evidence posterior 0.42 is too balanced to presume an answer (simulated)"
+      "assumed_response": "Assumed: no reply within 24 hours; evidence posterior 0.57 is too balanced to presume an answer (simulated)"
     }
   ],
   "next_best_actions": {
@@ -75,7 +83,7 @@
       {
         "action": "VERIFY_WITH_CUSTOMER",
         "route": "auto",
-        "reason": "R1: probability 0.42 is below 0.70 and the case rests on signals that are not conclusive; verify before any block"
+        "reason": "R1: probability 0.57 is below 0.70 and the case rests on signals that are not conclusive; verify before any block"
       },
       {
         "action": "CREATE_CASE",
@@ -105,7 +113,7 @@
         "reason": "R4: no reply within 24 hours"
       }
     ],
-    "what_changed": "No reply within 24 hours moved fraud probability from 0.42 to 0.42. Added DECLINE_TRANSACTION; dropped VERIFY_WITH_CUSTOMER."
+    "what_changed": "No reply within 24 hours moved fraud probability from 0.57 to 0.57. Added DECLINE_TRANSACTION; dropped VERIFY_WITH_CUSTOMER."
   },
   "sar": {
     "file": false,
@@ -118,5 +126,5 @@
   "stop_reason": "No reply within 24 hours (R4); the case stays open with monitoring. Further graph queries cannot resolve the remaining uncertainty without the customer.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.14
+  "latency_s": 3.52
 }

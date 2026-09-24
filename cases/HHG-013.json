@@ -42,11 +42,11 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-5011",
-      "CC-0673",
+      "CC-4395",
+      "CC-4724",
+      "CC-1928",
+      "CC-3734",
+      "CC-5182",
       "CC-3216"
     ],
     "summary": "Risk score on C07671-K2 for $35.66 (online, product C). Verdict legitimate at probability 0.02: no fraud. Key evidence: no strong signal beyond the trigger. Next: ALLOW_TRANSACTION, CLOSE_NO_FRAUD.",
@@ -103,5 +103,5 @@
   "stop_reason": "Verification settled the question: the cardholder confirmed the activity (R3). Further graph steps would not change the decision.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.16
+  "latency_s": 4.36
 }

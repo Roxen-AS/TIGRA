@@ -2,22 +2,22 @@
 // Traversal, filtering and aggregation run in TigerGraph; quantiles are finished client-side in store_tg.py.
 USE GRAPH TigraGraph
 
-// Card -> MADE -> Txn before a timestamp (behavioural baseline input).
-CREATE OR REPLACE QUERY card_history(VERTEX<Card> card, DATETIME before_ts) FOR GRAPH TigraGraph {
+// BankCard -> MADE -> Txn before a timestamp (behavioural baseline input).
+CREATE OR REPLACE QUERY card_history(VERTEX<BankCard> card, DATETIME before_ts) FOR GRAPH TigraGraph {
   S = {card};
   T = SELECT t FROM S:s -(MADE:e)- Txn:t WHERE t.ts < before_ts;
   PRINT T[T.txn_id, T.ts, T.amt, T.product, T.channel, T.addr1, T.p_email, T.device_id] AS txns;
 }
 
-// Card -> MADE -> Txn inside a time window.
-CREATE OR REPLACE QUERY card_window(VERTEX<Card> card, DATETIME start_ts, DATETIME end_ts, INT lim = 400) FOR GRAPH TigraGraph {
+// BankCard -> MADE -> Txn inside a time window.
+CREATE OR REPLACE QUERY card_window(VERTEX<BankCard> card, DATETIME start_ts, DATETIME end_ts, INT lim = 400) FOR GRAPH TigraGraph {
   S = {card};
   T = SELECT t FROM S:s -(MADE:e)- Txn:t WHERE t.ts >= start_ts AND t.ts <= end_ts ORDER BY t.ts ASC LIMIT lim;
   PRINT T AS txns;
 }
 
-// Card history restricted to one device / email / region before a timestamp.
-CREATE OR REPLACE QUERY card_attr_seen(VERTEX<Card> card, STRING attr, STRING val, DATETIME before_ts) FOR GRAPH TigraGraph {
+// BankCard history restricted to one device / email / region before a timestamp.
+CREATE OR REPLACE QUERY card_attr_seen(VERTEX<BankCard> card, STRING attr, STRING val, DATETIME before_ts) FOR GRAPH TigraGraph {
   SumAccum<INT> @@n;
   MinAccum<DATETIME> @@first;
   SetAccum<STRING> @@days;
@@ -30,7 +30,7 @@ CREATE OR REPLACE QUERY card_attr_seen(VERTEX<Card> card, STRING attr, STRING va
 }
 
 // Same product (and region for card-present) at ~the same amount earlier on the card: recurring-charge check (R7).
-CREATE OR REPLACE QUERY amount_recurrence(VERTEX<Card> card, INT before_txn, DOUBLE lo, DOUBLE hi, STRING prod, STRING reg) FOR GRAPH TigraGraph {
+CREATE OR REPLACE QUERY amount_recurrence(VERTEX<BankCard> card, INT before_txn, DOUBLE lo, DOUBLE hi, STRING prod, STRING reg) FOR GRAPH TigraGraph {
   SumAccum<INT> @@scope;
   S = {card};
   P = SELECT t FROM S:s -(MADE:e)- Txn:t
@@ -41,7 +41,7 @@ CREATE OR REPLACE QUERY amount_recurrence(VERTEX<Card> card, INT before_txn, DOU
   PRINT @@scope AS scope_n;
 }
 
-// DeviceProfile <- FROM_DEVICE <- Txn -> MADE -> Card, plus closed cases that touched the device (shared-origin check, R6).
+// DeviceProfile <- FROM_DEVICE <- Txn -> MADE -> BankCard, plus closed cases that touched the device (shared-origin check, R6).
 CREATE OR REPLACE QUERY device_neighbors(VERTEX<DeviceProfile> dev, DATETIME start_ts, DATETIME end_ts) FOR GRAPH TigraGraph {
   SetAccum<STRING> @@cards;
   SumAccum<INT> @@n;
@@ -58,10 +58,10 @@ CREATE OR REPLACE QUERY device_neighbors(VERTEX<DeviceProfile> dev, DATETIME sta
   PRINT C[C.card_id, C.outcome, C.pattern, C.opened_at] AS closed_cases;
 }
 
-// Customer -> OWNS -> Card -> ON_CARD/CASE_ON_CARD -> case memory (closed history + agent-written cases).
+// Customer -> OWNS -> BankCard -> ON_CARD/CASE_ON_CARD -> case memory (closed history + agent-written cases).
 CREATE OR REPLACE QUERY prior_cases(VERTEX<Customer> cust, DATETIME before_ts) FOR GRAPH TigraGraph {
   S = {cust};
-  K = SELECT k FROM S:s -(OWNS:e)- Card:k;
+  K = SELECT k FROM S:s -(OWNS:e)- BankCard:k;
   CC = SELECT c FROM K:k -(ON_CARD:e)- ClosedCase:c WHERE c.opened_at < before_ts;
   FC = SELECT f FROM K:k -(CASE_ON_CARD:e)- FraudCase:f WHERE f.opened_at < before_ts;
   PRINT CC AS closed_cases;
@@ -71,7 +71,7 @@ CREATE OR REPLACE QUERY prior_cases(VERTEX<Customer> cust, DATETIME before_ts) F
 CREATE OR REPLACE QUERY customer_cards(VERTEX<Customer> cust) FOR GRAPH TigraGraph {
   SumAccum<INT> @n;
   S = {cust};
-  K = SELECT k FROM S:s -(OWNS:e)- Card:k -(MADE:m)- Txn:t ACCUM k.@n += 1;
+  K = SELECT k FROM S:s -(OWNS:e)- BankCard:k -(MADE:m)- Txn:t ACCUM k.@n += 1;
   PRINT K[K.network, K.card_type, K.@n] AS cards;
 }
 
@@ -86,7 +86,7 @@ CREATE OR REPLACE QUERY kb_search(LIST<FLOAT> qv, INT k = 4) FOR GRAPH TigraGrap
 // Case-memory expansion: from a FraudCase, the cards/devices it touched and every other case on them.
 CREATE OR REPLACE QUERY case_neighbourhood(VERTEX<FraudCase> fc) FOR GRAPH TigraGraph {
   S = {fc};
-  K = SELECT k FROM S:s -((CASE_ON_CARD|CASE_CONNECTED):e)- Card:k;
+  K = SELECT k FROM S:s -((CASE_ON_CARD|CASE_CONNECTED):e)- BankCard:k;
   DV = SELECT d FROM S:s -(CASE_DEVICE:e)- DeviceProfile:d;
   O1 = SELECT c FROM K:k -((ON_CARD|CONNECTED_TO):e)- ClosedCase:c;
   O2 = SELECT f FROM K:k -((CASE_ON_CARD|CASE_CONNECTED):e)- FraudCase:f WHERE f != fc;
@@ -108,11 +108,10 @@ CREATE OR REPLACE QUERY closed_case_features() FOR GRAPH TigraGraph {
             c.@prod += (t.product -> 1),
             IF t.channel == "online" THEN c.@online += 1 END,
             IF t.device_status == "New" THEN c.@newdev += 1 END,
-            IF t.proxy != "" THEN c.@proxy += 1 END,
+            IF t.proxy_type != "" THEN c.@proxy += 1 END,
             IF t.device_id != "" THEN c.@devs += t.device_id END;
   PRINT C[C.customer_id, C.card_id, C.outcome, C.pattern, C.opened_at, C.exposure_usd, C.n_txns, C.report_filed,
           C.analyst_notes, C.@n, C.@online, C.@newdev, C.@proxy, C.@amin, C.@amax, C.@rmax, C.@t0, C.@t1, C.@prod, C.@devs] AS cases;
 }
 
-INSTALL QUERY closed_case_features, card_history, card_window, card_attr_seen, amount_recurrence, device_neighbors, prior_cases,
-              customer_cards, kb_search, case_neighbourhood
+INSTALL QUERY closed_case_features, card_history, card_window, card_attr_seen, amount_recurrence, device_neighbors, prior_cases, customer_cards, kb_search, case_neighbourhood

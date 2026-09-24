@@ -1,48 +1,31 @@
-// TigraGraph schema (TigerGraph 4.x, Savanna or Community Edition).
-// Run:  python -m tigra.tg_load --schema     (or paste into GSQL shell)
-
+// TigraGraph schema (TigerGraph 4.x, Savanna or Community Edition). One statement per line (GSQL file mode).
+// Run:  python -m tigra.tg_load --schema     (or paste into the GSQL shell)
+// BankCard (not Card): Savanna workspaces often ship a sample solution that already owns the global type `Card`.
 CREATE VERTEX Customer (PRIMARY_ID id STRING) WITH primary_id_as_attribute="true"
-CREATE VERTEX Card (PRIMARY_ID id STRING, customer_id STRING, network STRING, card_type STRING) WITH primary_id_as_attribute="true"
-CREATE VERTEX Txn (PRIMARY_ID id STRING, txn_id INT, ts DATETIME, amt DOUBLE, product STRING, channel STRING,
-                   card_id STRING, customer_id STRING, addr1 STRING, addr2 STRING, dist1 STRING,
-                   p_email STRING, r_email STRING, risk_score DOUBLE, device_id STRING, device_status STRING,
-                   proxy STRING, device_type STRING, M1 STRING, M2 STRING, M3 STRING, M4 STRING, M5 STRING, M6 STRING,
-                   C1 DOUBLE, C13 DOUBLE, D1 STRING, D15 STRING) WITH primary_id_as_attribute="true"
+CREATE VERTEX BankCard (PRIMARY_ID id STRING, customer_id STRING, network STRING, card_type STRING) WITH primary_id_as_attribute="true"
+CREATE VERTEX Txn (PRIMARY_ID id STRING, txn_id INT, ts DATETIME, amt DOUBLE, product STRING, channel STRING, card_id STRING, customer_id STRING, addr1 STRING, addr2 STRING, dist1 STRING, p_email STRING, r_email STRING, risk_score DOUBLE, device_id STRING, device_status STRING, proxy_type STRING, device_type STRING, M1 STRING, M2 STRING, M3 STRING, M4 STRING, M5 STRING, M6 STRING, C1 DOUBLE, C13 DOUBLE, D1 STRING, D15 STRING) WITH primary_id_as_attribute="true"
 CREATE VERTEX DeviceProfile (PRIMARY_ID id STRING, profile STRING, device_info STRING, os STRING, browser STRING, screen STRING) WITH primary_id_as_attribute="true"
 CREATE VERTEX EmailDomain (PRIMARY_ID id STRING) WITH primary_id_as_attribute="true"
 CREATE VERTEX BillingRegion (PRIMARY_ID id STRING) WITH primary_id_as_attribute="true"
-CREATE VERTEX ClosedCase (PRIMARY_ID id STRING, customer_id STRING, card_id STRING, opened_at DATETIME, closed_at DATETIME,
-                          outcome STRING, pattern STRING, exposure_usd DOUBLE, n_txns INT, report_filed STRING,
-                          actions_taken STRING, analyst_notes STRING) WITH primary_id_as_attribute="true"
-// Case memory written by the agent. One vertex per investigation; edges tie it to the evidence it rests on.
-CREATE VERTEX FraudCase (PRIMARY_ID id STRING, case_id STRING, card_id STRING, customer_id STRING, opened_at DATETIME,
-                         updated_at DATETIME, status STRING, verdict STRING, pattern STRING, fraud_probability DOUBLE,
-                         exposure_usd DOUBLE, summary STRING, sar_filed BOOL, actions STRING) WITH primary_id_as_attribute="true"
-// GraphRAG documents: policy rules, typologies, regulatory guidance, closed-case narratives.
+CREATE VERTEX ClosedCase (PRIMARY_ID id STRING, customer_id STRING, card_id STRING, opened_at DATETIME, closed_at DATETIME, outcome STRING, pattern STRING, exposure_usd DOUBLE, n_txns INT, report_filed STRING, actions_taken STRING, analyst_notes STRING) WITH primary_id_as_attribute="true"
+CREATE VERTEX FraudCase (PRIMARY_ID id STRING, case_id STRING, card_id STRING, customer_id STRING, opened_at DATETIME, updated_at DATETIME, status STRING, verdict STRING, pattern STRING, fraud_probability DOUBLE, exposure_usd DOUBLE, summary STRING, sar_filed BOOL, actions STRING) WITH primary_id_as_attribute="true"
 CREATE VERTEX Doc (PRIMARY_ID id STRING, title STRING, text STRING, source STRING) WITH primary_id_as_attribute="true"
-
-CREATE UNDIRECTED EDGE OWNS (FROM Customer, TO Card)
-CREATE UNDIRECTED EDGE MADE (FROM Card, TO Txn)
+CREATE UNDIRECTED EDGE OWNS (FROM Customer, TO BankCard)
+CREATE UNDIRECTED EDGE MADE (FROM BankCard, TO Txn)
 CREATE UNDIRECTED EDGE FROM_DEVICE (FROM Txn, TO DeviceProfile)
 CREATE UNDIRECTED EDGE PURCHASER_EMAIL (FROM Txn, TO EmailDomain)
 CREATE UNDIRECTED EDGE RECIPIENT_EMAIL (FROM Txn, TO EmailDomain)
 CREATE UNDIRECTED EDGE BILLED_IN (FROM Txn, TO BillingRegion)
 CREATE DIRECTED EDGE NEXT (FROM Txn, TO Txn) WITH REVERSE_EDGE="PREV"
 CREATE UNDIRECTED EDGE INVOLVES (FROM ClosedCase, TO Txn)
-CREATE UNDIRECTED EDGE ON_CARD (FROM ClosedCase, TO Card)
-CREATE UNDIRECTED EDGE CONNECTED_TO (FROM ClosedCase, TO Card)
+CREATE UNDIRECTED EDGE ON_CARD (FROM ClosedCase, TO BankCard)
+CREATE UNDIRECTED EDGE CONNECTED_TO (FROM ClosedCase, TO BankCard)
 CREATE UNDIRECTED EDGE CASE_INVOLVES (FROM FraudCase, TO Txn)
-CREATE UNDIRECTED EDGE CASE_ON_CARD (FROM FraudCase, TO Card)
-CREATE UNDIRECTED EDGE CASE_CONNECTED (FROM FraudCase, TO Card)
+CREATE UNDIRECTED EDGE CASE_ON_CARD (FROM FraudCase, TO BankCard)
+CREATE UNDIRECTED EDGE CASE_CONNECTED (FROM FraudCase, TO BankCard)
 CREATE UNDIRECTED EDGE CASE_DEVICE (FROM FraudCase, TO DeviceProfile)
 CREATE UNDIRECTED EDGE SIMILAR_TO (FROM FraudCase, TO ClosedCase, score DOUBLE)
-
-CREATE GRAPH TigraGraph (Customer, Card, Txn, DeviceProfile, EmailDomain, BillingRegion, ClosedCase, FraudCase, Doc,
-                         OWNS, MADE, FROM_DEVICE, PURCHASER_EMAIL, RECIPIENT_EMAIL, BILLED_IN, NEXT, INVOLVES, ON_CARD,
-                         CONNECTED_TO, CASE_INVOLVES, CASE_ON_CARD, CASE_CONNECTED, CASE_DEVICE, SIMILAR_TO)
-
+CREATE GRAPH TigraGraph (Customer, BankCard, Txn, DeviceProfile, EmailDomain, BillingRegion, ClosedCase, FraudCase, Doc, OWNS, MADE, FROM_DEVICE, PURCHASER_EMAIL, RECIPIENT_EMAIL, BILLED_IN, NEXT, INVOLVES, ON_CARD, CONNECTED_TO, CASE_INVOLVES, CASE_ON_CARD, CASE_CONNECTED, CASE_DEVICE, SIMILAR_TO)
 USE GRAPH TigraGraph
-CREATE SCHEMA_CHANGE JOB add_vectors FOR GRAPH TigraGraph {
-  ALTER VERTEX Doc ADD VECTOR ATTRIBUTE embedding(DIMENSION=512, METRIC="COSINE");
-}
-RUN SCHEMA_CHANGE JOB add_vectors
+CREATE GLOBAL SCHEMA_CHANGE JOB add_vectors { ALTER VERTEX Doc ADD VECTOR ATTRIBUTE embedding(DIMENSION=512, METRIC="COSINE"); }
+RUN GLOBAL SCHEMA_CHANGE JOB add_vectors

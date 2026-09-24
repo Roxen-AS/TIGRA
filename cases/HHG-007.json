@@ -42,11 +42,11 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-5011",
-      "CC-0673",
+      "CC-0104",
+      "CC-3136",
+      "CC-4597",
+      "CC-1682",
+      "CC-4277",
       "CC-4787"
     ],
     "summary": "Risk score on C09933-K2 for $111.92 (in person, product W). Verdict legitimate at probability 0.11: no fraud. Key evidence: Region 264 is familiar: 2220 earlier purchases on 155 days since 2016-07-03 | Flagged $111.92 is a typical amount for this card (card history: 2368 txns, median $77.02, 95th pct $335.03, max $2,310.20). Next: ALLOW_TRANSACTION, CLOSE_NO_FRAUD.",
@@ -92,5 +92,5 @@
   "stop_reason": "Section 6 stopping rule met: probability 0.11 backed by 2 independent evidence groups.",
   "tool_calls": 9,
   "tokens": 0,
-  "latency_s": 0.13
+  "latency_s": 3.32
 }

@@ -55,19 +55,19 @@
         "entity_ids": []
       },
       {
-        "claim": "Policy/typology grounding: 1 Card testing.",
+        "claim": "Policy/typology grounding: CC-2649 (confirmed_fraud, undocumented)",
         "source": "document",
-        "ref": "fraud_patterns#1",
+        "ref": "case:CC-2649",
         "entity_ids": []
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-2415",
-      "CC-3240",
-      "CC-2871",
-      "CC-0673",
-      "CC-2087"
+      "CC-2087",
+      "CC-0546",
+      "CC-1522",
+      "CC-2007",
+      "CC-5162",
+      "CC-2860"
     ],
     "summary": "Risk score on C07987-K2 for $99.92 (online, product R). Verdict fraud at probability 0.88: an undocumented pattern. Key evidence: device profile 'Windows | other | chrome 61.0 | 1280x720' was used by 5 different cards within \u00b114 days; near-identical amounts (mean $100.00, variation 0%) on one product code; the same purchaser/recipient email pair verizon.net / gmail.com on 100% of them | device profile 'Windows | other | chrome 61.0 | 1280x720' had never been used on C07987-K2 before; Vesta identity flag id_15 = New | Flagged $99.92 is a typical amount for this card (card history: 217 txns, median $116.92, 95th pct $559.64, max $1,586.94). Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST.",
     "written_to_graph": true,
@@ -153,5 +153,5 @@
   "stop_reason": "Section 6 stopping rule met: probability 0.88 backed by 2 independent evidence groups.",
   "tool_calls": 10,
   "tokens": 0,
-  "latency_s": 0.13
+  "latency_s": 4.45
 }

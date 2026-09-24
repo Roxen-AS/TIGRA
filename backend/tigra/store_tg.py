@@ -41,11 +41,25 @@ def _num(v):
         return None
 
 
+VERTEX_PARAMS = {"card", "dev", "cust", "fc"}  # names of VERTEX<T> parameters in tigergraph/queries.gsql
+
+
+def _strip_prefixes(obj):
+    """PRINT V[V.attr, V.@acc] returns keys like 'V.attr' / 'V.@acc'; normalise them to 'attr' / '@acc'."""
+    if isinstance(obj, list):
+        return [_strip_prefixes(x) for x in obj]
+    if isinstance(obj, dict):
+        return {(k.split(".", 1)[1] if k != "v_id" and "." in k and k.split(".", 1)[0].isidentifier() else k): _strip_prefixes(v)
+                for k, v in obj.items()}
+    return obj
+
+
 def _txn(v: dict) -> dict:
     """Flatten a Txn vertex into the local store's row shape (TigerGraph has no NULLs; '' means missing)."""
     a = v.get("attributes", v)
     out = {k: _none(a.get(k)) for k in ("ts", "product", "channel", "card_id", "customer_id", "p_email", "r_email",
-                                          "device_id", "device_status", "proxy", "device_type", "M1", "M2", "M3", "M4", "M5", "M6")}
+                                          "device_id", "device_status", "device_type", "M1", "M2", "M3", "M4", "M5", "M6")}
+    out["proxy"] = _none(a.get("proxy_type"))  # `proxy` is reserved in GSQL, so the graph attribute is proxy_type
     out.update(txn_id=int(a.get("txn_id") or v.get("v_id")), amt=float(a["amt"]), risk_score=float(a.get("risk_score", 0)),
                addr1=_num(a.get("addr1")), addr2=_num(a.get("addr2")), dist1=_num(a.get("dist1")),
                C1=_num(a.get("C1")), C13=_num(a.get("C13")), D1=_num(a.get("D1")), D15=_num(a.get("D15")))
@@ -109,9 +123,12 @@ class TigerGraphStore:
     def _run(self, query: str, **params) -> list[dict]:
         params = {k: v for k, v in params.items() if v is not None}
         if self.via_mcp:
-            return self._mcp.call("tigergraph__run_installed_query",
-                                  {"graph_name": config.TG_GRAPH, "query_name": query, "params": params})["result"]
-        return self.conn.runInstalledQuery(query, params, timeout=60000)
+            res = self._mcp.call("tigergraph__run_installed_query",
+                                 {"graph_name": config.TG_GRAPH, "query_name": query, "params": params})["result"]
+        else:  # POST: list parameters (vectors) are too long for a query string; VERTEX params go as 1-tuples
+            params = {k: (v,) if k in VERTEX_PARAMS else v for k, v in params.items()}
+            res = self.conn.runInstalledQuery(query, params, timeout=60000, usePost=True)
+        return _strip_prefixes(res)
 
     @staticmethod
     def _pick(res: list[dict], key: str):
@@ -264,6 +281,20 @@ class TigerGraphStore:
     def agent_cases(self) -> list[dict]:
         return []
 
+    def kb_search(self, query: str, k: int = 4, source_prefix: str | None = None) -> list[dict]:
+        """GraphRAG document retrieval with TigerGraph vectorSearch over Doc.embedding (cosine)."""
+        from .kb import embed
+        res = self._run("kb_search", qv=[round(float(x), 6) for x in embed(query)], k=k * 2 if source_prefix else k)
+        docs, dist = self._pick(res, "docs") or [], self._pick(res, "dist") or {}
+        out = []
+        for d in docs:
+            if source_prefix and not d["v_id"].startswith(source_prefix):
+                continue
+            a = d["attributes"]
+            out.append({"doc_id": d["v_id"], "title": a["title"], "text": a["text"][:700],
+                        "score": round(1 - float(dist.get(d["v_id"], 1.0)), 3)})
+        return sorted(out, key=lambda x: -x["score"])[:k]
+
     def write_case(self, rec: dict) -> str:
         cid = rec["graph_case_id"]
         self._upsert_vertex("FraudCase", cid, {
@@ -271,11 +302,11 @@ class TigerGraphStore:
             "updated_at": rec["updated_at"].replace("T", " "), "status": rec["status"], "verdict": rec["verdict"], "pattern": rec["pattern"],
             "fraud_probability": rec["fraud_probability"], "exposure_usd": rec["exposure_usd"], "summary": rec["summary"],
             "sar_filed": bool(rec["sar_filed"]), "actions": "|".join(rec["actions"])})
-        self._upsert_edge("FraudCase", cid, "CASE_ON_CARD", "Card", rec["card_id"])
+        self._upsert_edge("FraudCase", cid, "CASE_ON_CARD", "BankCard", rec["card_id"])
         for t in rec["txn_ids"]:
             self._upsert_edge("FraudCase", cid, "CASE_INVOLVES", "Txn", str(t))
         for k in rec["connected_card_ids"]:
-            self._upsert_edge("FraudCase", cid, "CASE_CONNECTED", "Card", k)
+            self._upsert_edge("FraudCase", cid, "CASE_CONNECTED", "BankCard", k)
         for d in rec["device_ids"]:
             self._upsert_edge("FraudCase", cid, "CASE_DEVICE", "DeviceProfile", d)
         return cid
@@ -288,5 +319,5 @@ class TigerGraphStore:
         if self.via_mcp:
             return {"backend": self.backend}
         c = self.conn.getVertexCount("*")
-        return {"transactions": c.get("Txn"), "cards": c.get("Card"), "customers": c.get("Customer"), "devices": c.get("DeviceProfile"),
+        return {"transactions": c.get("Txn"), "cards": c.get("BankCard"), "customers": c.get("Customer"), "devices": c.get("DeviceProfile"),
                 "closed_cases": c.get("ClosedCase"), "agent_cases": c.get("FraudCase")}

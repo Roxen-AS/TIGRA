@@ -43,7 +43,7 @@ def export() -> None:
         "case_conn.csv": "SELECT case_id, card_id FROM closed_case_conn",
     }
     for name, sql in jobs.items():
-        con.execute(f"COPY ({sql}) TO '{(TG_DIR / name).as_posix()}' (HEADER, DELIMITER ',', QUOTE '\"')")
+        con.execute(f"COPY ({sql}) TO '{(TG_DIR / name).as_posix()}' (HEADER false, DELIMITER ',', QUOTE '\"')")
         print(f"  exported {name}")
     con.close()
 

@@ -62,18 +62,18 @@
         "entity_ids": []
       },
       {
-        "claim": "Policy/typology grounding: R9 Undocumented patterns.",
+        "claim": "Policy/typology grounding: CC-2649 (confirmed_fraud, undocumented)",
         "source": "document",
-        "ref": "fraud_policy#12",
+        "ref": "case:CC-2649",
         "entity_ids": []
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-3944",
-      "CC-4179",
+      "CC-0031",
+      "CC-3206",
+      "CC-2799",
+      "CC-3039",
+      "CC-1056",
       "CC-3905"
     ],
     "summary": "Customer report on C11923-K2 for $131.30 (online, product C). Verdict fraud at probability 0.99: an undocumented pattern. Key evidence: device profile 'SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?' was used by 4 different cards within \u00b114 days; near-identical amounts (mean $128.47, variation 2%) on one product code; the same purchaser/recipient email pair gmail.com / gmail.com on 100% of them | device profile 'SM-G610F Build/NRD90M | ? | chrome 66.0 for android | ?' had never been used on C11923-K2 before; Vesta identity flag id_15 = New | Flagged $131.30 is above the card's 95th percentile (card history: 10174 txns, median $28.53, 95th pct $108.20, max $486.52). Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST.",
@@ -159,5 +159,5 @@
   "stop_reason": "Customer denial plus 3 independent graph evidence group(s) support the decision at probability 0.99; further steps would not change the R2 actions.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.14
+  "latency_s": 10.68
 }

@@ -52,12 +52,11 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-5011",
-      "CC-0673",
-      "CC-0873"
+      "CC-0873",
+      "CC-4398",
+      "CC-0986",
+      "CC-0882",
+      "CC-2261"
     ],
     "summary": "Risk score on C10434-K1 for $1,000.03 (online, product R). Verdict uncertain at probability 0.56: card-not-present fraud from a new device. Key evidence: Flagged $1,000.03 exceeds every earlier amount on the card (card history: 33 txns, median $68.98, 95th pct $669.99, max $670.04). Next: DECLINE_TRANSACTION, CREATE_CASE, MONITOR_CARD, ESCALATE_TO_ANALYST.",
     "written_to_graph": true,
@@ -123,5 +122,5 @@
   "stop_reason": "No reply within 24 hours (R4); the case stays open with monitoring. Further graph queries cannot resolve the remaining uncertainty without the customer.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.13
+  "latency_s": 3.86
 }

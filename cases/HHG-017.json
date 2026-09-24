@@ -48,19 +48,18 @@
         "entity_ids": []
       },
       {
-        "claim": "Policy/typology grounding: CC-1071 (confirmed_fraud, card_not_present_fraud)",
+        "claim": "Policy/typology grounding: Fraud Policy",
         "source": "document",
-        "ref": "case:CC-1071",
+        "ref": "fraud_policy#0",
         "entity_ids": []
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-5011",
-      "CC-0673",
-      "CC-1383"
+      "CC-1383",
+      "CC-0786",
+      "CC-1174",
+      "CC-0892",
+      "CC-1113"
     ],
     "summary": "Risk score on C04570-K1 for $100.09 (online, product R). Verdict legitimate at probability 0.03: no fraud. Key evidence: 9 earlier weekly charges of ~$100.09 on product R since 2016-07-18 (31% of that product's history on this card): matches the cardholder's own recurring pattern | the device was already used 3 time(s) on this card since 2016-10-27 | Connection went through a hidden proxy (id_23). Next: ALLOW_TRANSACTION, CLOSE_NO_FRAUD.",
     "written_to_graph": true,
@@ -105,5 +104,5 @@
   "stop_reason": "Section 6 stopping rule met: probability 0.03 backed by 2 independent evidence groups.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.16
+  "latency_s": 5.49
 }

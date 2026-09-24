@@ -61,7 +61,7 @@ python -m tigra.run_cases --fresh
 GRAPH_BACKEND=mcp ...       # same queries through the official TigerGraph MCP server
 ```
 
-Schema: `Customer, Card, Txn, DeviceProfile, EmailDomain, BillingRegion, ClosedCase, FraudCase, Doc(+embedding)`. Edges: `OWNS, MADE, FROM_DEVICE, PURCHASER_EMAIL, RECIPIENT_EMAIL, BILLED_IN, NEXT, INVOLVES, ON_CARD, CONNECTED_TO` and the case-memory edges `CASE_*` / `SIMILAR_TO`. Details are in `tigergraph/`.
+Graph `TigraGraph`: `Customer, BankCard, Txn, DeviceProfile, EmailDomain, BillingRegion, ClosedCase, FraudCase, Doc(+embedding)`. Edges: `OWNS, MADE, FROM_DEVICE, PURCHASER_EMAIL, RECIPIENT_EMAIL, BILLED_IN, NEXT, INVOLVES, ON_CARD, CONNECTED_TO` and the case-memory edges `CASE_*` / `SIMILAR_TO`. Details are in `tigergraph/`.
 
 The local DuckDB mirror implements the same tool interface with the same result shapes. It exists so TIGRA, the tests and the demo run offline. The GSQL files and the TigerGraph and MCP transports are written against the pyTigerGraph 2.0 and tigergraph-mcp 1.0.3 APIs.
 

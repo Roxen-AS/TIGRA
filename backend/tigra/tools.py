@@ -49,8 +49,8 @@ class ToolBus:
 
     def call(self, name: str, summarize: Callable[[Any], str] | None = None, **kwargs) -> Any:
         t0 = time.perf_counter()
-        if name == "kb_search":
-            out = self.kb.search(**kwargs)
+        if name == "kb_search":  # TigerGraph vectorSearch when available, in-process index otherwise
+            out = self.store.kb_search(**kwargs) if hasattr(self.store, "kb_search") else self.kb.search(**kwargs)
         elif name == "similar_cases":
             out = self.memory.similar(**kwargs)
         else:

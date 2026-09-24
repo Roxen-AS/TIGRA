@@ -37,19 +37,18 @@
         "entity_ids": []
       },
       {
-        "claim": "Policy/typology grounding: CC-1071 (confirmed_fraud, card_not_present_fraud)",
+        "claim": "Policy/typology grounding: 3 Card-not-present fraud from a new device.",
         "source": "document",
-        "ref": "case:CC-1071",
+        "ref": "fraud_patterns#3",
         "entity_ids": []
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-5011",
-      "CC-0673",
-      "CC-4160"
+      "CC-4160",
+      "CC-4514",
+      "CC-1003",
+      "CC-1161",
+      "CC-1315"
     ],
     "summary": "Risk score on C11891-K1 for $292.36 (online, product C). Verdict uncertain at probability 0.54: card-not-present fraud. Key evidence: Flagged $292.36 is 2.4x the largest amount this card ever spent (card history: 35 txns, median $47.29, 95th pct $91.41, max $121.32). Next: DECLINE_TRANSACTION, CREATE_CASE, MONITOR_CARD.",
     "written_to_graph": true,
@@ -110,5 +109,5 @@
   "stop_reason": "No reply within 24 hours (R4); the case stays open with monitoring. Further graph queries cannot resolve the remaining uncertainty without the customer.",
   "tool_calls": 9,
   "tokens": 0,
-  "latency_s": 0.13
+  "latency_s": 2.52
 }

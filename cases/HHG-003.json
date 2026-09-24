@@ -63,12 +63,11 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-2717",
-      "CC-3240",
-      "CC-2871",
-      "CC-3944",
-      "CC-3327"
+      "CC-2935",
+      "CC-3682",
+      "CC-3327",
+      "CC-4957",
+      "CC-2817"
     ],
     "summary": "Customer report on C08623-K2 for $49.00 (in person, product W). Verdict uncertain at probability 0.55: no fraud. Key evidence: Region 330 is familiar: 42 earlier purchases on 33 days since 2016-07-09 | Flagged $49.00 is a typical amount for this card (card history: 949 txns, median $65.04, 95th pct $424.93, max $2,680.95). Next: BLOCK_CARD, CREATE_CASE, ESCALATE_TO_ANALYST.",
     "written_to_graph": true,
@@ -123,5 +122,5 @@
   "stop_reason": "Customer denial plus 1 independent graph evidence group(s) support the decision at probability 0.55; further steps would not change the R2 actions.",
   "tool_calls": 10,
   "tokens": 0,
-  "latency_s": 0.14
+  "latency_s": 3.31
 }

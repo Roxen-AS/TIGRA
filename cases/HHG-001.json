@@ -42,11 +42,11 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-5011",
-      "CC-0673",
+      "CC-3587",
+      "CC-1066",
+      "CC-2964",
+      "CC-2040",
+      "CC-2923",
       "CC-1673"
     ],
     "summary": "Risk score on C12382-K1 for $77.07 (in person, product W). Verdict legitimate at probability 0.08: no fraud. Key evidence: Region 444 is familiar: 10 earlier purchases on 9 days since 2016-09-13 | Flagged $77.07 is a typical amount for this card (card history: 350 txns, median $83.94, 95th pct $385.71, max $845.01). Next: ALLOW_TRANSACTION, CLOSE_NO_FRAUD.",
@@ -92,5 +92,5 @@
   "stop_reason": "Section 6 stopping rule met: probability 0.08 backed by 2 independent evidence groups.",
   "tool_calls": 8,
   "tokens": 0,
-  "latency_s": 0.1
+  "latency_s": 2.42
 }

@@ -15,7 +15,7 @@
     "exposure_usd": 59.67,
     "evidence": [
       {
-        "claim": "Flagged $59.67 is a typical amount for this card (card history: 48 txns, median $37.76, 95th pct $83.68, max $94.70)",
+        "claim": "Flagged $59.67 is a typical amount for this card (card history: 48 txns, median $37.75, 95th pct $83.68, max $94.70)",
         "source": "graph",
         "ref": "query:card_profile(card_id=C09988-K1)",
         "entity_ids": [
@@ -53,13 +53,13 @@
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-3944",
-      "CC-4179"
+      "CC-0973",
+      "CC-2103",
+      "CC-0073",
+      "CC-1599",
+      "CC-4886"
     ],
-    "summary": "Customer report on C09988-K1 for $59.67 (online, product C). Verdict fraud at probability 0.74: card-not-present fraud from a new device. Key evidence: Flagged $59.67 is a typical amount for this card (card history: 48 txns, median $37.76, 95th pct $83.68, max $94.70). Next: BLOCK_CARD, CREATE_CASE.",
+    "summary": "Customer report on C09988-K1 for $59.67 (online, product C). Verdict fraud at probability 0.74: card-not-present fraud from a new device. Key evidence: Flagged $59.67 is a typical amount for this card (card history: 48 txns, median $37.75, 95th pct $83.68, max $94.70). Next: BLOCK_CARD, CREATE_CASE.",
     "written_to_graph": true,
     "graph_case_id": "CASE-HHG-016"
   },
@@ -102,5 +102,5 @@
   "stop_reason": "Customer denial plus 1 independent graph evidence group(s) support the decision at probability 0.74; further steps would not change the R2 actions.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.13
+  "latency_s": 3.45
 }

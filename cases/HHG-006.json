@@ -79,18 +79,18 @@
         "entity_ids": []
       },
       {
-        "claim": "Policy/typology grounding: R9 Undocumented patterns.",
+        "claim": "Policy/typology grounding: CC-2649 (confirmed_fraud, undocumented)",
         "source": "document",
-        "ref": "fraud_policy#12",
+        "ref": "case:CC-2649",
         "entity_ids": []
       }
     ],
     "similar_prior_cases": [
-      "CC-2496",
-      "CC-3240",
-      "CC-2871",
-      "CC-3944",
-      "CC-4179"
+      "CC-3907",
+      "CC-4086",
+      "CC-4124",
+      "CC-3841",
+      "CC-0860"
     ],
     "summary": "Customer report on C07297-K1 for $482.12 (online, product C). Verdict fraud at probability 0.99: an undocumented pattern. Key evidence: 4 online purchases within 30 minutes, each just under $500 ($478.95, $456.96, $488.04, $482.12), total $1,906.07 | Product code C was never used on this card before (history: W=190, H=2) | 4 unusual online purchases within 48 hours (above the card's 95th percentile or from a device new to the card), total $1,906.07. Next: BLOCK_CARD, CREATE_CASE, FILE_REPORT, ESCALATE_TO_ANALYST.",
     "written_to_graph": true,
@@ -161,5 +161,5 @@
   "stop_reason": "Customer denial plus 3 independent graph evidence group(s) support the decision at probability 0.99; further steps would not change the R2 actions.",
   "tool_calls": 11,
   "tokens": 0,
-  "latency_s": 0.16
+  "latency_s": 4.38
 }

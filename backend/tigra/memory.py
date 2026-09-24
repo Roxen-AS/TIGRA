@@ -15,8 +15,20 @@ import numpy as np
 PRODUCTS = ("W", "C", "H", "R", "S")
 
 
+def _f(x) -> float:
+    """Missing aggregates (SQL NULL -> None/NaN, e.g. no identity record on any transaction) count as 0."""
+    try:
+        x = float(x)
+    except (TypeError, ValueError):
+        return 0.0
+    return 0.0 if math.isnan(x) else x
+
+
 def feature_vector(online_share: float, new_device_share: float, proxy_share: float, amt_min: float, amt_max: float,
                    n_txns: int, span_min: float, product: str | None) -> np.ndarray:
+    online_share, new_device_share, proxy_share = _f(online_share), _f(new_device_share), _f(proxy_share)
+    amt_min = None if amt_min is None else _f(amt_min)
+    amt_max, n_txns, span_min = _f(amt_max), int(_f(n_txns)), _f(span_min)
     v = [
         online_share, new_device_share, proxy_share,
         math.log1p(max(amt_min or 0, 0)) / 8, math.log1p(max(amt_max or 0, 0)) / 8,
@@ -81,7 +93,7 @@ class CaseMemory:
     def similar(self, vec: np.ndarray, card_id: str, customer_id: str, devices: set[str], before_ts: str,
                 k: int = 5, fraud_only: bool = False) -> list[dict]:
         """fraud_only: for customer disputes, compare against confirmed cases (cleared history = model alerts only)."""
-        sims = self.matrix @ vec
+        sims = np.nan_to_num(self.matrix @ vec)  # a NaN would silently break the ranking below
         scored = []
         for i, item in enumerate(self.items):
             if item.opened_at >= before_ts:      # memory only contains what was known when the alert fired
